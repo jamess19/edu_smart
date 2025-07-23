@@ -1,13 +1,18 @@
 package com.edusmart.entity.Materials;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class CourseMaterial {
+@Table(name = "STUDENTMATERIALS")
+public class StudentMaterial {
+    @Id
     public Integer resourceId;
-    public Integer courseId;
+    @Id
+    public Integer studentId;
 }

@@ -7,5 +7,5 @@ import com.edusmart.entity.Student.Student;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Integer> {
-    
+     
 }

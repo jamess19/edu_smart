@@ -1,13 +1,12 @@
 package com.edusmart.entity.Staff;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.GenerationType;
+
 @Getter
 @Setter
 @Entity
+@Table(name = "STAFFS")
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
