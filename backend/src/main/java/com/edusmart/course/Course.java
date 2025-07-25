@@ -14,7 +14,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer course_id;
     @ManyToOne
-    @JoinColumn(name ="department_id")
+    @JoinColumn(name = "department_id")
     private Department department;
     private String course_name;
     private String course_code;
