@@ -23,5 +23,4 @@ public class TeachingAssignment {
     @OneToOne
     @JoinColumn(name = "opencourse_id")
     private OpenCourse course;
-
 }
