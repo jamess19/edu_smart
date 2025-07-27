@@ -17,6 +17,7 @@ public class Enrollment {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer enrollment_id;
     private Timestamp enrolled_at;
+    private String status;
     private float theoretical_point;
     private float practical_point;
     private float midterm_point;
