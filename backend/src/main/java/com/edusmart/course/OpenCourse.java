@@ -2,19 +2,22 @@ package com.edusmart.course;
 
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.List;
 
+import com.edusmart.teaching.TeachingAssignment;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "OPENCOURSES")
+@Table(name = "open_course")
 public class OpenCourse {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer opencourse_id;
-    @OneToOne
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer open_course_id;
+    @ManyToOne
     @JoinColumn(name ="course_id")
     private Course course;
     public Integer max_student;
@@ -22,4 +25,7 @@ public class OpenCourse {
     public Year year;
     public LocalDateTime registation_start;
     public LocalDateTime registation_end;
+    @OneToMany(mappedBy = "open_course")
+    @JsonManagedReference
+    List<TeachingAssignment> teachingAssignments;
 }

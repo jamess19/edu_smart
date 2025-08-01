@@ -1,12 +1,12 @@
 package com.edusmart.notification;
 
-import com.edusmart.course.Course;
-import com.edusmart.user.User;
+import com.edusmart.course.OpenCourse;
+import com.edusmart.user.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "notification")
@@ -20,8 +20,8 @@ public class Notification {
     private Timestamp created_at;
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    private User teacher;
+    private Teacher teacher;
     @ManyToOne
-    @JoinColumn(name = "opencourse_id")
-    private Course course;
+    @JoinColumn(name = "open_course_id")
+    private OpenCourse open_course;
 }

@@ -1,13 +1,13 @@
 package com.edusmart.resource;
 
 import com.edusmart.course.OpenCourse;
-import com.edusmart.user.User;
+import com.edusmart.user.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Resource")
+@Table(name = "resource")
 @Getter
 @Setter
 public class Resource {
@@ -18,9 +18,9 @@ public class Resource {
     private String type;
     private String filepath;
     @ManyToOne
-    @JoinColumn(name = "opencourse_id")
+    @JoinColumn(name = "open_course_id")
     private OpenCourse opencourse;
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    private User teacher;
+    private Teacher teacher;
 }

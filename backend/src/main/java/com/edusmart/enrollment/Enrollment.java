@@ -1,20 +1,21 @@
 package com.edusmart.enrollment;
 
 import com.edusmart.course.OpenCourse;
-import com.edusmart.user.User;
+import com.edusmart.user.Student;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Enrollment")
+@Table(name = "enrollment")
 @Getter
 @Setter
 public class Enrollment {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer enrollment_id;
     private Timestamp enrolled_at;
     private String status;
@@ -24,10 +25,11 @@ public class Enrollment {
     private float endterm_point;
     private float final_point;
     @ManyToOne
-    @JoinColumn(name = "opencourse_id")
+    @JoinColumn(name = "open_course_id")
     private OpenCourse opencourse;
     @ManyToOne
     @JoinColumn(name = "student_id")
-    private User student;
+    @JsonIgnore
+    private Student student;
 
 }

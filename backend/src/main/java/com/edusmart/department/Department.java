@@ -1,24 +1,22 @@
 package com.edusmart.department;
 
-import com.edusmart.user.User;
+import com.edusmart.user.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Entity
-@Table(name="DEPARTMENTS")
+@Table(name="department")
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer department_id;
     private String department_name;
     private String department_code;
     private String description;
     @OneToOne
-    @JoinColumn(name = "manager")
-    private User manager;
+    @JoinColumn(name = "manager_id")
+    private Teacher manager;
 }

@@ -2,16 +2,17 @@ package com.edusmart.user;
 
 import jakarta.persistence.*;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.Date;
 import com.edusmart.department.Department;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @Setter
 @Getter
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

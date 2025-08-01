@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "COURSES")
+@Table(name = "course")
 public class Course {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer course_id;
     @ManyToOne
     @JoinColumn(name = "department_id")

@@ -1,5 +1,6 @@
 package com.edusmart.assignment;
 
+import com.edusmart.user.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Assignment")
+@Table(name = "assignment")
 @Getter
 @Setter
 public class Assignment {
@@ -20,4 +21,7 @@ public class Assignment {
     private LocalDateTime due_date;
     private float max_score;
     private String filepath;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 }

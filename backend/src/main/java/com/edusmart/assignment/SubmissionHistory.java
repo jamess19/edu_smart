@@ -1,15 +1,15 @@
 package com.edusmart.assignment;
 
-import com.edusmart.user.User;
+import com.edusmart.user.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 
 @Entity
-@Table(name = "SubmissionHistory")
+@Table(name = "submission_history")
 @Getter
 @Setter
 public class SubmissionHistory {
@@ -21,7 +21,7 @@ public class SubmissionHistory {
     private float score;
     @ManyToOne
     @JoinColumn(name = "student_id")
-    private User student;
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name = "assignment_id")
