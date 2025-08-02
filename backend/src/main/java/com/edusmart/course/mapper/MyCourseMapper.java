@@ -4,6 +4,7 @@ import com.edusmart.course.Course;
 import com.edusmart.course.OpenCourse;
 import com.edusmart.course.dto.MyCourseDTO;
 import com.edusmart.enrollment.Enrollment;
+import com.edusmart.user.dto.CourseTeacherDTO;
 import com.edusmart.user.dto.TeacherInfoDTO;
 import com.edusmart.user.mapper.TeacherMapper;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,9 @@ public class MyCourseMapper {
     public MyCourseDTO toMyCourseDTO(Enrollment enrollment){
         OpenCourse openCourse = enrollment.getOpencourse();
         Course course = openCourse.getCourse();
-        List<TeacherInfoDTO> teachers = openCourse.getTeachingAssignments()
+        List<CourseTeacherDTO> teachers = openCourse.getTeachingAssignments()
                 .stream()
-                .map(ta -> teacherMapper.toTeacherInfoDTO((ta.getTeacher())))
+                .map(teacherMapper::toCourseTeacherDTO)
                 .toList();
 
         return new MyCourseDTO(
