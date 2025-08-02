@@ -1,11 +1,10 @@
 package com.edusmart.course.mapper;
 
-import com.edusmart.course.Course;
-import com.edusmart.course.OpenCourse;
+import com.edusmart.course.model.Course;
+import com.edusmart.course.model.OpenCourse;
 import com.edusmart.course.dto.MyCourseDTO;
-import com.edusmart.enrollment.Enrollment;
+import com.edusmart.enrollment.model.Enrollment;
 import com.edusmart.user.dto.CourseTeacherDTO;
-import com.edusmart.user.dto.TeacherInfoDTO;
 import com.edusmart.user.mapper.TeacherMapper;
 import org.springframework.stereotype.Component;
 

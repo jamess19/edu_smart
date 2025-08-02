@@ -1,8 +1,6 @@
 package com.edusmart.course.dto;
 
-import com.edusmart.course.Course;
 import com.edusmart.user.dto.CourseTeacherDTO;
-import com.edusmart.user.dto.TeacherInfoDTO;
 
 import java.time.Year;
 import java.util.List;

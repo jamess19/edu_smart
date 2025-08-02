@@ -1,7 +1,7 @@
 package com.edusmart.user.mapper;
 
 import com.edusmart.user.dto.StudentDTO;
-import com.edusmart.user.Student;
+import com.edusmart.user.model.Student;
 import org.springframework.stereotype.Component;
 
 @Component
