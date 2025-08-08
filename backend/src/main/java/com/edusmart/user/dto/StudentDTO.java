@@ -8,10 +8,6 @@ public record StudentDTO(
         String major,
         int completed_credits,
         int total_credits,
-        String type,
-        String fullname,
-        String address,
-        String email,
-        Date birthday
+        String type
 ) {
 }

@@ -18,7 +18,8 @@ public class StudentService {
 
     public Optional<StudentDTO> getStudentById(int student_id) {
         return studentRepository.findById(student_id)
-                .map(studentMapper::toStudentDTO).or(() -> Optional.empty());
+                .map(studentMapper::toStudentDTO).
+                or(() -> Optional.empty());
     }
 
 }

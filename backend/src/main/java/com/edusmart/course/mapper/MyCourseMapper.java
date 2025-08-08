@@ -32,6 +32,7 @@ public class MyCourseMapper {
                 course.getCredits(),
                 openCourse.getTerm(),
                 openCourse.getYear(),
+                enrollment.getStatus(),
                 teachers);
     }
 }

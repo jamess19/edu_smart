@@ -26,8 +26,8 @@ public class CourseService {
     @Transactional(readOnly = true)
     public List<MyCourseDTO> getAllCourses(int student_id) {
         return enrollmentRepository.findAllByStudent_Id(student_id)
-                .stream().map(
-                        myCourseMapper::toMyCourseDTO)
+                .stream()
+                .map(myCourseMapper::toMyCourseDTO)
                 .toList();
     }
 }

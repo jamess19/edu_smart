@@ -13,11 +13,7 @@ public class StudentMapper {
                 student.getMajor(),
                 student.getCompleted_credits(),
                 student.getTotal_credits(),
-                student.getType(),
-                student.getFullname(),
-                student.getAddress(),
-                student.getEmail(),
-                student.getBirthday()
+                student.getType()
         );
     }
 }

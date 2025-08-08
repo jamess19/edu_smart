@@ -12,6 +12,7 @@ public record MyCourseDTO(
         int credits,
         int term,
         Year year,
+        String status,
         List<CourseTeacherDTO> teachers
 ) {
 }

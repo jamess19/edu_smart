@@ -2,6 +2,7 @@ package com.edusmart.course.controller;
 
 import com.edusmart.course.service.CourseService;
 import com.edusmart.course.dto.MyCourseDTO;
+import com.edusmart.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +21,9 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @GetMapping("/{student_id}/my-learning")
-    public ResponseEntity<List<MyCourseDTO>> getAllMyCourses(@PathVariable int student_id) {
+    @GetMapping("/students/{student_id}")
+    public ApiResponse<List<MyCourseDTO>> getAllMyCourses(@PathVariable int student_id) {
         List<MyCourseDTO> myCourses = courseService.getAllCourses(student_id);
-        return ResponseEntity.ok(myCourses);
+        return ApiResponse.success(myCourses, null);
     }
 }
