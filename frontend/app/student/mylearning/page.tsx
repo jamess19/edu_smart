@@ -6,21 +6,25 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FileText, Users, Download, Eye, User, GraduationCap, BookOpen, Trophy, CheckCircle, Calendar, MapPin, Clock } from "lucide-react"
+import { FileText, GraduationCap, BookOpen, Trophy, CheckCircle, Calendar, MapPin } from "lucide-react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
+import { StudentService } from "@/services/studentService"
+import { studentInfo } from "@/types/student"
 
 export default function StudentCourses() {
-  // Thông tin sinh viên
-  const studentInfo = {
-    name: "Nguyễn Văn A",
-    studentId: "20210001",
-    email: "student@edusmart.edu",
-    avatar: "/placeholder.svg?height=80&width=80",
-    gpa: 3.65,
-    totalCredits: 120,
-    completedCredits: 85,
-    major: "Khoa học máy tính",
-  }
+  const [studentInfo, setStudentInfo] = useState<studentInfo>();
+  useEffect(() => {
+    const fetchStudentInfo = async () => {
+      var studentId = localStorage.getItem("userId");
+      if(studentId) {
+        const data = await StudentService.getStudentInfo(Number(studentId));
+        setStudentInfo(data)
+      }
+    }
+    fetchStudentInfo();
+  }, [])
+
 
   // Khóa học hiện tại (đang học)
   const currentCourses = [
@@ -136,10 +140,6 @@ export default function StudentCourses() {
     return currentCourses.reduce((total, course) => total + course.credits, 0)
   }
 
-  const getCompletedCredits = () => {
-    return completedCourses.reduce((total, course) => total + course.credits, 0)
-  }
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -154,15 +154,15 @@ export default function StudentCourses() {
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
               <AvatarFallback className="text-lg font-bold bg-blue-100 text-blue-600">
-                {studentInfo.name.split(' ').map(n => n[0]).join('')}
+                {studentInfo?.fullname.split(' ').map(n => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <CardTitle className="text-xl text-gray-900">{studentInfo.name}</CardTitle>
+              <CardTitle className="text-xl text-gray-900">{studentInfo?.fullname}</CardTitle>
               <CardDescription className="text-base text-gray-600">
-                MSSV: {studentInfo.studentId} • {studentInfo.major}
+                MSSV: {studentInfo?.student_code} • {studentInfo?.major}
               </CardDescription>
-              <p className="text-sm text-gray-500 mt-1">{studentInfo.email}</p>
+              <p className="text-sm text-gray-500 mt-1">{studentInfo?.email}</p>
             </div>
           </div>
         </CardHeader>
@@ -173,8 +173,8 @@ export default function StudentCourses() {
                 <Trophy className="h-5 w-5 text-yellow-600 mr-2" />
                 <span className="text-sm font-medium text-gray-600">GPA</span>
               </div>
-              <div className={`text-2xl font-bold ${getGPAColor(studentInfo.gpa)}`}>
-                {studentInfo.gpa.toFixed(2)}
+              <div className={`text-2xl font-bold ${getGPAColor(studentInfo?.gpa ?? 0)}`}>
+                {studentInfo?.gpa?.toFixed(2) ?? "0.00"}
               </div>
               <div className="text-xs text-gray-500">/ 4.0</div>
             </div>
@@ -185,9 +185,9 @@ export default function StudentCourses() {
                 <span className="text-sm font-medium text-gray-600">Tín chỉ tích lũy</span>
               </div>
               <div className="text-2xl font-bold text-blue-600">
-                {studentInfo.completedCredits}
+                {studentInfo?.completed_credits}
               </div>
-              <div className="text-xs text-gray-500">/ {studentInfo.totalCredits} tín chỉ</div>
+              <div className="text-xs text-gray-500">/ {studentInfo?.total_credits} tín chỉ</div>
             </div>
             
             <div className="text-center">
@@ -207,15 +207,19 @@ export default function StudentCourses() {
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-medium text-gray-600">Tiến độ tốt nghiệp</span>
               <span className="text-sm text-gray-500">
-                {Math.round((studentInfo.completedCredits / studentInfo.totalCredits) * 100)}%
+                {studentInfo?.completed_credits
+                  ? Math.round((studentInfo.completed_credits / studentInfo.completed_credits) * 100)
+                  : 0}%
               </span>
             </div>
             <Progress 
-              value={(studentInfo.completedCredits / studentInfo.totalCredits) * 100} 
+              value={
+                ((studentInfo?.completed_credits ?? 0) / (studentInfo?.completed_credits ?? 1)) * 100
+              } 
               className="h-3"
             />
             <p className="text-xs text-gray-500 mt-1">
-              Còn {studentInfo.totalCredits - studentInfo.completedCredits} tín chỉ để tốt nghiệp
+              Còn {(studentInfo?.total_credits ?? 0) - (studentInfo?.completed_credits ?? 0)} tín chỉ để tốt nghiệp
             </p>
           </div>
         </CardContent>

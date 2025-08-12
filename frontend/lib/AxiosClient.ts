@@ -1,7 +1,7 @@
 // lib/axiosClient.ts
 import axios from 'axios';
 
-const axiosClient = axios.create({
+const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api/v1',
   headers: {
     'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ const axiosClient = axios.create({
 //   return config;
 // });
 
-axiosClient.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
@@ -30,4 +30,4 @@ axiosClient.interceptors.response.use(
   }
 );
 
-export default axiosClient;
+export default apiClient;

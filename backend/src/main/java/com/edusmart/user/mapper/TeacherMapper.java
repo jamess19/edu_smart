@@ -19,6 +19,15 @@ public class TeacherMapper {
 
     public TeacherInfoDTO toTeacherInfoDTO(Teacher teacher) {
         return new TeacherInfoDTO(
+                teacher.getId(),
+                teacher.getUsername(),
+                teacher.getPassword(),
+                teacher.getFullname(),
+                teacher.getAddress(),
+                teacher.getEmail(),
+                teacher.getBirthday(),
+                teacher.getUser_type(),
+                teacher.getDepartment().getDepartment_name(),
                 teacher.getTeacher_code(),
                 teacher.getEmail(),
                 teacher.getResearch_area(),

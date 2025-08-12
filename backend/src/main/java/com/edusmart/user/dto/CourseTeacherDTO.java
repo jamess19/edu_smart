@@ -1,7 +1,8 @@
 package com.edusmart.user.dto;
 
-import java.util.Date;
+import lombok.Builder;
 
+@Builder
 public record CourseTeacherDTO(
         String fullname,
         String email,

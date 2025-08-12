@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,30 +10,27 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BookOpen, Users, GraduationCap } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { authService } from "@/services/authService"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [userType, setUserType] = useState("student")
   const router = useRouter()
-
+  
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    // Mock login - in real app, this would call your Java backend
-    const mockUser = {
-      id: userType === "teacher" ? "teacher1" : "student1",
-      email,
-      name: userType === "teacher" ? "Nguyễn Văn A" : "Trần Thị B",
-      role: userType,
-    }
-
-    localStorage.setItem("user", JSON.stringify(mockUser))
-
-    if (userType === "teacher") {
-      router.push("/dashboard")
-    } else {
-      router.push("/student")
+    const data = await authService.login(username, password, userType);
+    if(data) {
+      localStorage.setItem("token", data.token);
+      switch (userType) {
+        case "student":
+          router.push("/student/home");
+          break;
+        case "teacher":
+          router.push("/teacher");
+          break;
+      }
     }
   }
 
@@ -74,10 +71,10 @@ export default function LoginPage() {
                     <Label htmlFor="student-email">Email sinh viên</Label>
                     <Input
                       id="student-email"
-                      type="email"
+                      type="text"
                       placeholder="student@university.edu.vn"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
                     />
                   </div>
@@ -89,9 +86,9 @@ export default function LoginPage() {
                     <Input
                       id="teacher-email"
                       type="email"
-                      placeholder="teacher@university.edu.vn"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
                     />
                   </div>
