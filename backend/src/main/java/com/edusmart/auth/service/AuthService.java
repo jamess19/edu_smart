@@ -41,17 +41,16 @@ public class AuthService {
     public ApiResponse<LoginResponse> login(LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByUsername(loginRequest.username())
                 .or(() -> Optional.empty());
-    
-        // gọi passwordEncoder để match mật khẩu người dùng với mật khẩu trong database đã được mã hoá
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-        if (user.isPresent() && user.get().getUser_type().equals(loginRequest.role())
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        if (user.isPresent()
 //                && passwordEncoder.matches(loginRequest.password(), user.get().getPassword())
         ) {
             // generate token
             var token = jwtService.generateToken(user.get());
             var loginResponse = LoginResponse.builder()
                     .token(token)
+                    .role(user.get().getUser_type())
                     .build();
             return ApiResponse.success(loginResponse, "login success");
         }

@@ -116,6 +116,9 @@ INSERT INTO enrollment (enrollment_id, open_course_id, student_id, enrolled_at, 
 (13, 5, 13, '2025-02-16 13:00:00', 'pass', 8.0, 8.5, 8.2, 8.3, 8.2),
 (14, 5, 8, '2025-02-16 13:30:00', 'fail', 7.0, 7.5, 7.2, 3.8, 4.83),
 (15, 5, 11, '2025-02-16 14:00:00', 'enrolled', NULL, NULL, NULL, NULL, NULL);
+(16, 3, 16, '2025-08-12 15:30:00', 'pending', NULL, NULL, NULL, NULL, NULL),
+(17, 4, 17, '2025-08-12 09:00:00', 'pending', NULL, NULL, NULL, NULL, NULL),
+(18, 5, 11, '2025-08-12 14:00:00', 'pending', NULL, NULL, NULL, NULL, NULL);
 
 -- Insert resource
 INSERT INTO resource (resource_id, teacher_id, open_course_id, name, type, filepath) VALUES

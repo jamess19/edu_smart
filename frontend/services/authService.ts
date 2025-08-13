@@ -3,15 +3,13 @@ import { userInfo } from "@/types/user";
 
 
 export const authService = {
-    login: async (username: string, password: string, role: string) => {
+    login: async (username: string, password: string) => {
         const res = await apiClient.post("/auth/login", 
             {
                 username, 
-                password, 
-                role
+                password
             }
         );
-        console.log(res.data);
         return res.data;
     },
     getProfile: async (id: number): Promise<userInfo> => {

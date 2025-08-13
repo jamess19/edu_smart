@@ -1,9 +1,14 @@
 package com.edusmart.user.service;
 
 import com.edusmart.auth.service.JwtService;
+import com.edusmart.common.exception.ErrorCode;
+import com.edusmart.dto.ApiResponse;
 import com.edusmart.user.mapper.StudentMapper;
 import com.edusmart.user.mapper.TeacherMapper;
 import com.edusmart.user.mapper.UserMapper;
+import com.edusmart.user.model.Student;
+import com.edusmart.user.model.Teacher;
+import com.edusmart.user.model.User;
 import com.edusmart.user.repository.StudentRepository;
 import com.edusmart.user.repository.TeacherRepository;
 import com.edusmart.user.repository.UserRepository;
@@ -43,19 +48,23 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    // login, lưu userID và role trong token,
-    // giải mã token để lấy thông tin người dùng thông qua user/me hàm getCurrentUser
-    // public Optional<?> getCurrentUser(String token) throws ParseException, JOSEException
-    // {
-    //     JSONObject jwtObject = jwtService.decode(token);
-    //     String role = jwtObject.get("scope").toString();
-    //     int userId = Integer.parseInt(jwtObject.get("userId").toString());
+//     login, lưu userID và role trong token,
+//     giải mã token để lấy thông tin người dùng thông qua user/me hàm getCurrentUser
+     public ApiResponse<?> getCurrentUser(String authHeader) throws ParseException, JOSEException {
+         String token = authHeader.replace("Bearer ", "");
+         JSONObject jwtObject = jwtService.decode(token);
+         String role = jwtObject.get("scope").toString();
+         int userId = Integer.parseInt(jwtObject.get("userId").toString());
 
-    //     return switch (role) {
-    //         case "student" -> studentRepository.findById(userId).map(studentMapper::toStudentDTO);
-    //         case "teacher" -> teacherRepository.findById(userId);
-    //         default -> userRepository.findById(userId);
-    //     };
-    // }
+         User user = userRepository.findById(userId).orElse(null);
+         if (user instanceof Student) {
+             return ApiResponse.success(studentMapper.toStudentDTO((Student) user),
+                     "get student success");
+         } else if (user instanceof Teacher) {
+             return ApiResponse.success(teacherMapper.toTeacherInfoDTO((Teacher) user),
+                     "get teacher success");
+         }
+         return ApiResponse.error(ErrorCode.NOT_FOUND);
+     }
 }
 

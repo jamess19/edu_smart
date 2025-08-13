@@ -15,7 +15,7 @@ import java.text.ParseException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("api/v1/users")
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -23,17 +23,12 @@ public class UserController {
         this.userService = userService;
     }
     
-    // @GetMapping("/me")
-    // public ApiResponse<?> getCurrentUser(
-    //         @RequestHeader("Authorization") String authHeader)
-    //         throws ParseException, JOSEException {
-    //     String token = authHeader.replace("Bearer ", "");
-    //     var user = userService.getCurrentUser(token);
-    //     if(user.isPresent()){
-    //         return ApiResponse.success(user, "success");
-    //     }
-    //     return ApiResponse.error(ErrorCode.NOT_FOUND);
-    // }
+     @GetMapping("/me")
+     public ApiResponse<?> getCurrentUser(
+             @RequestHeader("Authorization") String authHeader)
+             throws ParseException, JOSEException {
+         return userService.getCurrentUser(authHeader);
+     }
 
 //    @GetMapping("/{id}")
 //    public ApiResponse<UserInfor> getUserById(@PathVariable int id) {

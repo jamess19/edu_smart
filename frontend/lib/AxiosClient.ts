@@ -8,26 +8,31 @@ const apiClient = axios.create({
   },
 });
 
-// // Optional: Interceptors (ví dụ thêm token, xử lý lỗi toàn cục)
-// axiosClient.interceptors.request.use((config) => {
-//   // Ví dụ: thêm token từ localStorage
-//   if (typeof window !== 'undefined') {
-//     const token = localStorage.getItem('access_token');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//   }
-//   return config;
-// });
-
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      console.log('Unauthenticated!');
+// Optional: Interceptors (ví dụ thêm token, xử lý lỗi toàn cục)
+apiClient.interceptors.request.use((config) => {
+  const publicEndpoints = [
+      '/auth/login'
+    ];
+    const isPublicEndpoint = publicEndpoints.some(endpoint => 
+      config.url?.includes(endpoint)
+    );
+  if (!isPublicEndpoint && typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    if (token) {
+      console.log(token);
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return Promise.reject(error);
   }
-);
+  console.log('Request:', {
+      url: config.url,
+      method: config.method,
+      isPublic: isPublicEndpoint
+    });
+  return config;}
+,
+(error) => {
+  console.log("request error:", error);
+  return Promise.reject(error)
+});
 
 export default apiClient;

@@ -3,12 +3,11 @@ package com.edusmart.course.controller;
 import com.edusmart.course.service.CourseService;
 import com.edusmart.course.dto.MyCourseDTO;
 import com.edusmart.dto.ApiResponse;
+import com.nimbusds.jose.JOSEException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 
@@ -21,9 +20,11 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @GetMapping("/students/{student_id}")
-    public ApiResponse<List<MyCourseDTO>> getAllMyCourses(@PathVariable int student_id) {
-        List<MyCourseDTO> myCourses = courseService.getAllCourses(student_id);
-        return ApiResponse.success(myCourses, null);
+    @GetMapping("/my-courses")
+    public ApiResponse<List<MyCourseDTO>> getAllMyCourses(
+            @RequestHeader("Authorization") String authHeader)
+            throws ParseException, JOSEException {
+        List<MyCourseDTO> myCourses = courseService.getAllCourses(authHeader);
+        return ApiResponse.success(myCourses, "");
     }
 }

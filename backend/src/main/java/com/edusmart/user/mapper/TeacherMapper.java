@@ -11,6 +11,7 @@ public class TeacherMapper {
     public CourseTeacherDTO toCourseTeacherDTO(TeachingAssignment ta) {
         Teacher teacher = ta.getTeacher();
         return new CourseTeacherDTO(
+                teacher.getTeacher_code(),
                 teacher.getFullname(),
                 teacher.getEmail(),
                 ta.getRole()
