@@ -15,7 +15,7 @@ import {
 const items = [
   {
     title: "Home",
-    url: "http://localhost:3000/student",
+    url: "http://localhost:3000/student/home",
     icon: Home,
   },
   {

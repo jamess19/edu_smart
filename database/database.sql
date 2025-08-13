@@ -1,154 +1,192 @@
--- Department (manager_id để sau mới gắn FK)
-use edusmart
-CREATE TABLE Department (
-  department_id INT PRIMARY KEY AUTO_INCREMENT,
-  department_name VARCHAR(100),
-  department_code VARCHAR(20),
-  description TEXT,
-  manager_id INT
+
+
+use edusmart;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- DROP TABLE IF EXISTS 
+--     teaching_assignment, 
+--     enrollment,
+--     submission_history,
+--     assignment,
+--     resource,
+--     notification,
+--     open_course,
+--     course,
+--     student,
+--     teacher,
+--     user,
+--     department;
+
+-- department
+CREATE TABLE department (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(100),
+    department_code VARCHAR(50),
+    description TEXT,
+    manager_id INT
 );
 
--- User
-CREATE TABLE User (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  department_id INT,
-  username VARCHAR(50) UNIQUE,
-  password VARCHAR(100),
-  fullname VARCHAR(100),
-  address VARCHAR(255),
-  email VARCHAR(100),
-  birthday DATE,
-  user_type VARCHAR(20),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  uploaded_at TIMESTAMP NULL
+-- user
+CREATE TABLE user (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    department_id INT,
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(255),
+    fullname VARCHAR(100),
+    address VARCHAR(255),
+    email VARCHAR(100),
+    birthday DATE,
+    user_type VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
--- Courses
-CREATE TABLE Courses (
-  course_id INT PRIMARY KEY AUTO_INCREMENT,
-  department_id INT,
-  course_name VARCHAR(100),
-  course_code VARCHAR(20),
-  description TEXT,
-  credits INT
+-- student
+CREATE TABLE student (
+    id INT PRIMARY KEY, -- user_id
+    student_code NVARCHAR(20),
+    gpa FLOAT,
+    major VARCHAR(100),
+    completed_credits INT,
+    total_credits INT,
+    type VARCHAR(20)
 );
 
--- OpenCourses
-CREATE TABLE OpenCourses (
-  opencourse_id INT PRIMARY KEY AUTO_INCREMENT,
-  course_id INT,
-  max_student INT,
-  term INT,
-  year INT,
-  registration_start DATETIME,
-  registration_end DATETIME
+-- teacher
+CREATE TABLE teacher (
+    id INT PRIMARY KEY, -- Cùng PK với user
+    teacher_code NVARCHAR(20),
+    degree VARCHAR(100),
+    research_area VARCHAR(255),
+    years_of_experience INT DEFAULT 0
 );
 
--- TeachingAssignment
-CREATE TABLE TeachingAssignment (
-  assignment_id INT PRIMARY KEY AUTO_INCREMENT,
-  opencourse_id INT,
-  teacher_id INT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- course
+CREATE TABLE course (
+    course_id INT PRIMARY KEY AUTO_INCREMENT,
+    department_id INT,
+    course_name VARCHAR(100),
+    course_code VARCHAR(50) UNIQUE,
+    description TEXT,
+    credits INT
 );
 
--- Enrollment
-CREATE TABLE Enrollment (
-  enrollment_id INT PRIMARY KEY AUTO_INCREMENT,
-  opencourse_id INT,
-  student_id INT,
-  enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  status VARCHAR(20),
-  theoretical_point FLOAT,
-  practical_point FLOAT,
-  midterm_point FLOAT,
-  endterm_point FLOAT,
-  final_point FLOAT
+-- open_course
+CREATE TABLE open_course (
+    open_course_id INT PRIMARY KEY AUTO_INCREMENT,
+    course_id INT,
+    max_student INT,
+    term INT,
+    year YEAR,
+    registation_start DATETIME,
+    registation_end DATETIME
 );
 
--- Resources
-CREATE TABLE Resources (
-  resource_id INT PRIMARY KEY AUTO_INCREMENT,
-  teacher_id INT,
-  opencourse_id INT,
-  name VARCHAR(100),
-  type VARCHAR(50),
-  filepath VARCHAR(255)
+-- enrollment
+CREATE TABLE enrollment (
+    enrollment_id INT PRIMARY KEY AUTO_INCREMENT,
+    open_course_id INT,
+    student_id INT,
+    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50),
+    theoretical_point FLOAT,
+    practical_point FLOAT,
+    midterm_point FLOAT,
+    endterm_point FLOAT,
+    final_point FLOAT
 );
 
--- Notification
-CREATE TABLE Notification (
-  notification_id INT PRIMARY KEY AUTO_INCREMENT,
-  teacher_id INT,
-  opencourse_id INT,
-  content TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Teaching assignment
+CREATE TABLE teaching_assignment (
+    assignment_id INT PRIMARY KEY AUTO_INCREMENT,
+    open_course_id INT,
+    teacher_id INT,
+    role NVARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Assignment
-CREATE TABLE Assignment (
-  assignment_id INT PRIMARY KEY AUTO_INCREMENT,
-  teacher_id INT,
-  title VARCHAR(255),
-  start_date DATETIME,
-  due_date DATETIME,
-  max_score FLOAT,
-  filepath VARCHAR(255),
-  description TEXT
+-- assignment
+CREATE TABLE assignment (
+    assignment_id INT PRIMARY KEY AUTO_INCREMENT,
+    teacher_id INT,
+    title VARCHAR(100),
+    start_date DATETIME,
+    due_date DATETIME,
+    max_score FLOAT,
+    filepath VARCHAR(255),
+    description TEXT
 );
 
 -- Submission History
-CREATE TABLE Submission_History (
-  submission_id INT PRIMARY KEY AUTO_INCREMENT,
-  student_id INT,
-  assignment_id INT,
-  filepath VARCHAR(255),
-  submitted_at TIMESTAMP,
-  score FLOAT
+CREATE TABLE submission_history (
+    submission_id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT,
+    assignment_id INT,
+    filepath VARCHAR(255),
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    score FLOAT
+);
+
+-- notification
+CREATE TABLE notification (
+    notification_id INT PRIMARY KEY AUTO_INCREMENT,
+    teacher_id INT,
+    open_course_id INT,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- resource
+CREATE TABLE resource (
+    resource_id INT PRIMARY KEY AUTO_INCREMENT,
+    teacher_id INT,
+    open_course_id INT,
+    name VARCHAR(100),
+    type VARCHAR(50),
+    filepath VARCHAR(255)
 );
 
 
--- User → Department
-ALTER TABLE User
-  ADD CONSTRAINT fk_user_department FOREIGN KEY (department_id) REFERENCES Department(department_id);
+-- user
+ALTER TABLE user ADD CONSTRAINT fk_user_department FOREIGN KEY (department_id) REFERENCES department(department_id);
 
--- Department → User (manager)
-ALTER TABLE Department
-  ADD CONSTRAINT fk_department_manager FOREIGN KEY (manager_id) REFERENCES User(id);
+-- student & teacher liên kết với user
+ALTER TABLE student ADD CONSTRAINT fk_student_user FOREIGN KEY (id) REFERENCES user(id) ON DELETE CASCADE;
+ALTER TABLE teacher ADD CONSTRAINT fk_teacher_user FOREIGN KEY (id) REFERENCES user(id) ON DELETE CASCADE;
 
--- Courses → Department
-ALTER TABLE Courses
-  ADD CONSTRAINT fk_courses_department FOREIGN KEY (department_id) REFERENCES Department(department_id);
+-- department manager
+ALTER TABLE department ADD CONSTRAINT fk_department_manager 
+    FOREIGN KEY (manager_id) REFERENCES teacher(id);
+-- course
+ALTER TABLE course ADD CONSTRAINT fk_course_department FOREIGN KEY (department_id) REFERENCES department(department_id);
 
--- OpenCourses → Courses
-ALTER TABLE OpenCourses
-  ADD CONSTRAINT fk_opencourses_course FOREIGN KEY (course_id) REFERENCES Courses(course_id);
+-- open_course
+ALTER TABLE open_course ADD CONSTRAINT fk_open_course_course FOREIGN KEY (course_id) REFERENCES course(course_id);
 
--- TeachingAssignment → OpenCourses, User
-ALTER TABLE TeachingAssignment
-  ADD CONSTRAINT fk_teachassign_opencourse FOREIGN KEY (opencourse_id) REFERENCES OpenCourses(opencourse_id),
-  ADD CONSTRAINT fk_teachassign_teacher FOREIGN KEY (teacher_id) REFERENCES User(id);
+-- enrollment
+ALTER TABLE enrollment
+    ADD CONSTRAINT fk_enrollment_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id),
+    ADD CONSTRAINT fk_enrollment_student FOREIGN KEY (student_id) REFERENCES student(id);
 
--- Enrollment → OpenCourses, User
-ALTER TABLE Enrollment
-  ADD CONSTRAINT fk_enrollment_opencourse FOREIGN KEY (opencourse_id) REFERENCES OpenCourses(opencourse_id),
-  ADD CONSTRAINT fk_enrollment_student FOREIGN KEY (student_id) REFERENCES User(id);
+-- teaching_assignment
+ALTER TABLE teaching_assignment
+    ADD CONSTRAINT fk_assignment_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id),
+    ADD CONSTRAINT fk_teaching_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id);
+-- assignment
+ALTER TABLE assignment
+    ADD CONSTRAINT fk_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id);
 
--- Resources → User, OpenCourses
-ALTER TABLE Resources
-  ADD CONSTRAINT fk_resources_teacher FOREIGN KEY (teacher_id) REFERENCES User(id),
-  ADD CONSTRAINT fk_resources_opencourse FOREIGN KEY (opencourse_id) REFERENCES OpenCourses(opencourse_id);
+-- submission_history
+ALTER TABLE submission_history
+    ADD CONSTRAINT fk_submission_student FOREIGN KEY (student_id) REFERENCES student(id),
+    ADD CONSTRAINT fk_submission_assignment FOREIGN KEY (assignment_id) REFERENCES assignment(assignment_id);
 
--- Notification → User, OpenCourses
-ALTER TABLE Notification
-  ADD CONSTRAINT fk_notification_teacher FOREIGN KEY (teacher_id) REFERENCES User(id),
-  ADD CONSTRAINT fk_notification_opencourse FOREIGN KEY (opencourse_id) REFERENCES OpenCourses(opencourse_id);
+-- notification
+ALTER TABLE notification
+    ADD CONSTRAINT fk_notification_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id),
+    ADD CONSTRAINT fk_notification_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id);
 
--- Assignment → User
-ALTER TABLE Assignment
-  ADD CONSTRAINT fk_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES User(id);
-
--- Submission_History → User, Assignment
-ALTER TABLE Submission_History
-  ADD CONSTRAINT fk_submission_student FOREIGN KEY (student_id) REFERENCES User(id),
-  ADD CONSTRAINT fk_submission_assignment FOREIGN KEY (assignment_id) REFERENCES Assignment(assignment_id);
+-- resource
+ALTER TABLE resource
+    ADD CONSTRAINT fk_resource_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id),
+    ADD CONSTRAINT fk_resource_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id);
