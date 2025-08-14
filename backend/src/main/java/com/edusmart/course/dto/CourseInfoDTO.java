@@ -8,7 +8,7 @@ import com.edusmart.user.dto.CourseTeacherDTO;
 import java.time.Year;
 import java.util.List;
 
-public record CourseInDetailDTO(
+public record CourseInfoDTO(
         String course_name,
         String course_code,
         int credits,
