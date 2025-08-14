@@ -1,11 +1,13 @@
 package com.edusmart.assignment.model;
 
+import com.edusmart.course.model.OpenCourse;
 import com.edusmart.user.model.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "assignment")
@@ -24,4 +26,9 @@ public class Assignment {
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
+    @ManyToOne
+    @JoinColumn(name = "open_course_id")
+    private OpenCourse open_course;
+    @OneToMany(mappedBy = "assignment")
+    private List<SubmissionHistory> submission_history;
 }

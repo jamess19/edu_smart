@@ -1,4 +1,4 @@
-export interface studentInfo {
+export interface StudentInfo {
     fullname: String,
     email: String,
     user_type: String,
@@ -9,4 +9,9 @@ export interface studentInfo {
     completed_credits: number | 0,
     total_credits: number | 0,
     type: string,
+}
+
+export interface StudentInCourse {
+    fullname: String,
+    student_code: string
 }

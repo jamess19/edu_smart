@@ -22,7 +22,6 @@ public class SubmissionHistory {
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
-
     @ManyToOne
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;

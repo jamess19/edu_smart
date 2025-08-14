@@ -10,13 +10,13 @@ import { FileText, GraduationCap, BookOpen, Trophy, CheckCircle, Calendar, User,
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { StudentService } from "@/services/studentService"
-import { studentInfo } from "@/types/student"
+import { StudentInfo } from "@/types/student"
 import { UserService } from "@/services/userService"
 import { CourseService } from "@/services/courseService"
 import { MyCourse } from "@/types/course"
 
 export default function StudentCourses() {
-  const [studentInfo, setStudentInfo] = useState<studentInfo | null>(null);
+  const [studentInfo, setStudentInfo] = useState<StudentInfo | null>(null);
   const [completedCourses, setCompletedCourses] = useState<MyCourse[]>([]);
   const [currentCourses, setCurrentCourses] = useState<MyCourse[]>([])
   

@@ -109,6 +109,7 @@ CREATE TABLE teaching_assignment (
 CREATE TABLE assignment (
     assignment_id INT PRIMARY KEY AUTO_INCREMENT,
     teacher_id INT,
+    open_course_id INT,
     title VARCHAR(100),
     start_date DATETIME,
     due_date DATETIME,
@@ -132,6 +133,7 @@ CREATE TABLE notification (
     notification_id INT PRIMARY KEY AUTO_INCREMENT,
     teacher_id INT,
     open_course_id INT,
+    title NVARCHAR(255),
     content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -170,12 +172,12 @@ ALTER TABLE enrollment
 
 -- teaching_assignment
 ALTER TABLE teaching_assignment
-    ADD CONSTRAINT fk_assignment_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id),
+    ADD CONSTRAINT fk_teaching_assignment_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id),
     ADD CONSTRAINT fk_teaching_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id);
 -- assignment
 ALTER TABLE assignment
-    ADD CONSTRAINT fk_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id);
-
+    ADD CONSTRAINT fk_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id),
+    ADD CONSTRAINT fk_assignment_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id);
 -- submission_history
 ALTER TABLE submission_history
     ADD CONSTRAINT fk_submission_student FOREIGN KEY (student_id) REFERENCES student(id),

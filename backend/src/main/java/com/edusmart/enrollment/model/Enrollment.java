@@ -27,7 +27,7 @@ public class Enrollment {
     private Float final_point;
     @ManyToOne
     @JoinColumn(name = "open_course_id")
-    private OpenCourse opencourse;
+    private OpenCourse open_course;
     @ManyToOne
     @JoinColumn(name = "student_id")
     @JsonIgnore

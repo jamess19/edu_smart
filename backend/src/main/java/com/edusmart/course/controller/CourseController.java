@@ -1,5 +1,6 @@
 package com.edusmart.course.controller;
 
+import com.edusmart.course.dto.CourseInfoDTO;
 import com.edusmart.course.service.CourseService;
 import com.edusmart.course.dto.MyCourseDTO;
 import com.edusmart.dto.ApiResponse;
@@ -24,7 +25,12 @@ public class CourseController {
     public ApiResponse<List<MyCourseDTO>> getAllMyCourses(
             @RequestHeader("Authorization") String authHeader)
             throws ParseException, JOSEException {
-        List<MyCourseDTO> myCourses = courseService.getAllCourses(authHeader);
+        List<MyCourseDTO> myCourses = courseService.getAllMyCourses(authHeader);
         return ApiResponse.success(myCourses, "");
+    }
+
+    @GetMapping("/my-courses/{open_course_id}")
+    public ApiResponse<CourseInfoDTO> getCourseInfoByOpenCourseId(@PathVariable int open_course_id) {
+        return courseService.getCourseDetailByOpenCourseId(open_course_id);
     }
 }
