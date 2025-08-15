@@ -2,23 +2,16 @@ package com.edusmart.course.service;
 
 import com.edusmart.auth.service.JwtService;
 import com.edusmart.common.exception.ErrorCode;
-import com.edusmart.course.dto.CourseInfoDTO;
+import com.edusmart.course.dto.CourseDetailDTO;
 import com.edusmart.course.dto.MyCourseDTO;
-import com.edusmart.course.dto.StudentInCourseDTO;
 import com.edusmart.course.mapper.MyCourseMapper;
-import com.edusmart.course.model.Course;
 import com.edusmart.course.model.OpenCourse;
 import com.edusmart.course.repository.CourseRepository;
 import com.edusmart.course.repository.OpenCourseRepository;
 import com.edusmart.dto.ApiResponse;
-import com.edusmart.enrollment.model.Enrollment;
 import com.edusmart.enrollment.repository.EnrollmentRepository;
-import com.edusmart.resource.dto.ResourceInfoDTO;
 import com.edusmart.resource.mapper.ResourceMapper;
-import com.edusmart.resource.model.Resource;
 import com.edusmart.resource.repository.ResourceRepository;
-import com.edusmart.user.dto.CourseTeacherDTO;
-import com.edusmart.user.dto.TeacherInfoDTO;
 import com.edusmart.user.mapper.StudentMapper;
 import com.nimbusds.jose.JOSEException;
 import org.json.JSONObject;
@@ -59,11 +52,15 @@ public class CourseService {
                 .toList();
     }
 
-    public ApiResponse<CourseInfoDTO> getCourseDetailByOpenCourseId(int open_course_id) {
+    public ApiResponse<CourseDetailDTO> getCourseDetailByOpenCourseId(int open_course_id, String authHeader)
+            throws ParseException, JOSEException {
         Optional<OpenCourse> openCourses = openCourseRepository.findById(open_course_id);
+        String token = authHeader.replace("Bearer ", "");
+        JSONObject object = jwtService.decode(token);
+        int student_id = object.optInt("userId");
         if(openCourses.isPresent()) {
-            CourseInfoDTO courseInfoDTO = myCourseMapper.toCourseInfoDTO(openCourses.get());
-            return ApiResponse.success(courseInfoDTO, "get success");
+            CourseDetailDTO courseDetailDTO = myCourseMapper.toCoursDetailDTO(openCourses.get(), student_id);
+            return ApiResponse.success(courseDetailDTO, "get success");
         }
         return ApiResponse.error(ErrorCode.NOT_FOUND);
     }

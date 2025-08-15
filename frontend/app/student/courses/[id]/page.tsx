@@ -38,11 +38,12 @@ import { useParams } from "next/navigation"
 import { CourseService } from "@/services/courseService"
 import { CourseInDetail } from "@/types/course"
 import { ResourceInCourse } from "@/types/resource"
+import { AssignmentInCourse } from "@/types/assignment"
+import { NotificationInCourse } from "@/types/notification"
 
 
 export default function CourseDetail() {
   const [activeTab, setActiveTab] = useState("overview")
-  const [userRole] = useState("student") // "teacher" or "student"
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [submissionNote, setSubmissionNote] = useState("")
   const [isSubmissionOpen, setIsSubmissionOpen] = useState(false)
@@ -50,6 +51,8 @@ export default function CourseDetail() {
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null)
   const params = useParams();
   const [resources, setResources] = useState<ResourceInCourse[]>([])
+  const [assignments, setAssignments] = useState<AssignmentInCourse[]>([])
+  const [notifications, setNotifications] = useState<NotificationInCourse[]>([])
   const [courseData, setCourseData] = useState<CourseInDetail|null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -61,49 +64,13 @@ export default function CourseDetail() {
       const res = await CourseService.getMyCourseById(Number(course_id))
       const courseDetail = res.data
       console.log(courseDetail)
-      setResources(courseDetail.resources)
       setCourseData(courseDetail)
+      setResources(courseDetail.resources)
+      setAssignments(courseDetail.assignments)
+      setNotifications(courseDetail.notifications)
     }
     fetchCourse()
   }, [])
-  // Mock data
-
-
-  const assignments = [
-    {
-      id: 1,
-      title: "Bài tập 1: Tạo Component cơ bản",
-      description: "Tạo các component React cơ bản và sử dụng props",
-      dueDate: "2024-01-15",
-      status: "submitted",
-      grade: 8.5,
-      submissions: 42,
-      pdfUrl: "/assignments/bai-tap-1-component-co-ban.pdf",
-      mySubmission: {
-        files: ["component-basic.zip", "readme.txt"],
-        submittedAt: "2024-01-14",
-        note: "Đã hoàn thành tất cả yêu cầu trong bài tập",
-      },
-    },
-    {
-      id: 2,
-      title: "Bài tập 2: State Management",
-      description: "Xây dựng ứng dụng Todo với useState và useEffect",
-      dueDate: "2024-01-22",
-      status: "pending",
-      submissions: 38,
-      pdfUrl: "/assignments/bai-tap-2-state-management.pdf",
-    },
-    {
-      id: 3,
-      title: "Project cuối kỳ: E-commerce App",
-      description: "Xây dựng ứng dụng thương mại điện tử hoàn chỉnh",
-      dueDate: "2024-02-15",
-      status: "not_started",
-      submissions: 0,
-      pdfUrl: "/assignments/project-cuoi-ky-ecommerce.pdf",
-    },
-  ]
 
   // File handling functions
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,45 +98,6 @@ export default function CourseDetail() {
   const openViewSubmissionModal = (assignment: any) => {
     setSelectedAssignment(assignment)
     setIsViewSubmissionOpen(true)
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "submitted":
-        return "green"
-      case "pending":
-        return "yellow"
-      case "not_started":
-        return "gray"
-      default:
-        return "gray"
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "submitted":
-        return "Đã nộp"
-      case "pending":
-        return "Chưa nộp"
-      case "not_started":
-        return "Chưa bắt đầu"
-      default:
-        return "Không xác định"
-    }
-  }
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "red"
-      case "medium":
-        return "yellow"
-      case "low":
-        return "green"
-      default:
-        return "gray"
-    }
   }
 
   return (
@@ -201,7 +129,7 @@ export default function CourseDetail() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {courseData?.resources.map((resource) => (
+                  {resources.map((resource) => (
                     <div
                       key={resource.resource_id.toString()}
                       className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
@@ -234,10 +162,6 @@ export default function CourseDetail() {
                     <span className="text-gray-600">Số sinh viên:</span>
                     <span className="font-medium">{courseData?.students.length}</span>
                   </div>
-                  {/* <div className="flex justify-between">
-                    <span className="text-gray-600">Thời lượng:</span>
-                    <span className="font-medium">{course.duration}</span>
-                  </div> */}
                 </CardContent>
               </Card>
 
@@ -247,26 +171,11 @@ export default function CourseDetail() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {[
-                      {
-                        name: "TS. Nguyễn Văn B",
-                        email: "nguyenb@university.edu.vn",
-                        phone: "0123 456 789",
-                        avatar: "/diverse-classroom-teacher.png",
-                        department: "Khoa Công nghệ thông tin",
-                      },
-                      {
-                        name: "ThS. Trần Thị C",
-                        email: "tranc@university.edu.vn",
-                        phone: "0987 654 321",
-                        avatar: "/teacher-female.png",
-                        department: "Khoa Công nghệ thông tin",
-                      },
-                    ].map((instructor, idx) => (
+                    {courseData?.teachers.map((instructor, idx) => (
                       <div key={instructor.email} className="flex items-start gap-3 border-b pb-3 last:border-b-0 last:pb-0">
                         <Avatar>
                           <AvatarFallback>
-                            {instructor.name
+                            {instructor.fullname
                               .split(" ")
                               .map((w) => w[0])
                               .join("")
@@ -275,9 +184,9 @@ export default function CourseDetail() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium">{instructor.name}</p>
+                          <p className="font-medium">{instructor.fullname}</p>
+                          <p className="text-sm text-gray-600">{instructor.role}</p>
                           <p className="text-sm text-gray-600">Email: <span className="font-mono">{instructor.email}</span></p>
-                          <p className="text-sm text-gray-600">Điện thoại: {instructor.phone}</p>
                         </div>
                       </div>
                     ))}
@@ -290,134 +199,138 @@ export default function CourseDetail() {
 
         {/* Assignments Tab */}
         <TabsContent value="assignments" className="space-y-6">
-          {userRole === "teacher" && (
+          <div className="grid gap-4">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Plus className="w-5 h-5" />
-                  Tạo bài tập mới
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Input placeholder="Tiêu đề bài tập" />
-                <Textarea placeholder="Mô tả bài tập" />
-                <div className="flex gap-4">
-                  <Input type="date" placeholder="Hạn nộp" />
-                  <Button>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Tạo bài tập
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <div className="grid gap-4">
-            {assignments.map((assignment) => (
-              <Card key={assignment.id} className="p-4">
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="w-5 h-5" />
+                    Bài tập
+                  </CardTitle>
+                </CardHeader>
+            <CardContent>
+              {assignments.map((assignment) => (
+                <div key={assignment.assignment_id.toString()} className="flex items-center justify-between p-3 border rounded-l rounded-sm">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      {assignment.status === "submitted" ? (
-                        <CheckCircle className="w-4 h-4 text-green-600" />
-                      ) : assignment.status === "pending" ? (
-                        <AlertCircle className="w-4 h-4 text-yellow-600" />
-                      ) : (
-                        <Clock className="w-4 h-4 text-gray-400" />
-                      )}
-                      <h3 className="font-semibold text-sm">{assignment.title}</h3>
-                      <Badge
-                        variant="outline"
-                        className={`text-xs text-${getStatusColor(assignment.status)}-600 border-${getStatusColor(assignment.status)}-200`}
-                      >
-                        {getStatusText(assignment.status)}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-gray-600 mb-2">{assignment.description}</p>
+                    <h3 className="font-semibold gap-2 mb-2">{assignment.title}</h3>
                     <div className="flex flex-wrap gap-3 text-xs text-gray-500">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs text-black bg-transparent"
+                        onClick={() => {
+                          if (assignment.filepath) {
+                            const link = document.createElement("a");
+                            link.href = assignment.filepath.toString();
+                            link.download = assignment.filepath.toString().split("/").pop() || "file";
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }
+                        }}
+                      >
+                        <FileText className="w-3 h-3 mr-1" />
+                        file
+                      </Button>
+                      {/* Deadline */}
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        <span>Hạn: {new Date(assignment.dueDate).toLocaleDateString("vi-VN")}</span>
+                        <span>Hạn: {new Date(assignment.due_date).toLocaleDateString("vi-VN")}</span>
                       </div>
-                      {userRole === "teacher" && (
-                        <div className="flex items-center gap-1">
-                          <Users className="w-3 h-3" />
-                          <span>{assignment.submissions} bài nộp</span>
-                        </div>
-                      )}
-                      {assignment.grade && (
-                        <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3" />
-                          <span>Điểm: {assignment.grade}/10</span>
-                        </div>
-                      )}
+
+                      {/* Điểm  */}
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3" />
+                          <span>
+                          Điểm: {assignment.submission?.score !== undefined && assignment.submission?.score !== null
+                            ? `${assignment.submission.score}/`
+                            : ""}
+                          </span>
+                      </div>
                     </div>
+
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
-                    <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                      <FileText className="w-3 h-3 mr-1" />
-                      PDF
-                    </Button>
-                    {userRole === "student" ? (
-                      assignment.status === "submitted" ? (
+                    {assignment.submission != null ? (
+                      <>
+                        {/* Đã nộp bài - có thể xem và nộp lại */}
                         <Button
                           size="sm"
                           variant="outline"
                           className="text-xs bg-transparent"
-                          onClick={() => openViewSubmissionModal(assignment)}
+                          onClick={() => {
+                            console.log("Opening view submission modal for:", assignment); // Debug
+                            openViewSubmissionModal(assignment);
+                          }}
                         >
                           <Eye className="w-3 h-3 mr-1" />
-                          Xem bài
+                          Xem bài nộp
                         </Button>
-                      ) : (
-                        <Button size="sm" className="text-xs" onClick={() => openSubmissionModal(assignment)}>
+                        <Button 
+                          size="sm" 
+                          className="text-xs" 
+                          onClick={() => {
+                            openSubmissionModal(assignment);
+                          }}
+                        >
+                          <Upload className="w-3 h-3 mr-1" />
+                          Nộp lại
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button 
+                          size="sm" 
+                          className="text-xs" 
+                          onClick={() => {
+                            openSubmissionModal(assignment);
+                          }}
+                        >
                           <Upload className="w-3 h-3 mr-1" />
                           Nộp bài
                         </Button>
-                      )
-                    ) : (
-                      <>
-                        <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                          <Eye className="w-3 h-3 mr-1" />
-                          Xem ({assignment.submissions})
-                        </Button>
-                        <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                          <Edit className="w-3 h-3 mr-1" />
-                          Sửa
-                        </Button>
                       </>
                     )}
-                  </div>
-                </div>
-              </Card>
-            ))}
+                        </div>
+                      </div>
+                  ))}
+            </CardContent>
+          </Card>
           </div>
         </TabsContent>
 
         {/* Announcements Tab */}
         <TabsContent value="announcements" className="space-y-6">
-          <div className="space-y-4">
-            {courseData?.notifications.map((notification) => (
-              <Card key={notification.notification_id.toString()}>
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="flex items-center gap-2">
-                        <Bell/>
-                        {notification.title}
-                      </CardTitle>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {notification.teacher_posted} • {new Date(notification.created_at).toLocaleDateString("vi-VN")}
+          <div className="space-y-2">
+            <Card>
+              <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="w-5 h-5" />
+                    Thông báo
+                  </CardTitle>
+                </CardHeader>
+              <CardContent>
+              {notifications.map((notification) => (
+                <div key={notification.notification_id.toString()} className="p-3 border rounded-l rounded-sm">
+                  <div className="items-center">
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-x-2 font-semibold my-2">
+                        <Bell/> {notification.title}
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        {notification.teacher_posted} - {new Date(notification.created_at).toLocaleDateString("vi-VN")}
                       </p>
                     </div>
+                    <hr className="my-2" />
+                    <div className="p-3">
+                        <p className="text-gray-700">{notification.content}</p>
+                      </div>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700">{notification.content}</p>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              ))}
+              </CardContent>
+            </Card>
           </div>
+        
         </TabsContent>
 
         {/* Chatbot Tab */}

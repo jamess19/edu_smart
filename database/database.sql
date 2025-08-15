@@ -6,7 +6,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- DROP TABLE IF EXISTS 
 --     teaching_assignment, 
 --     enrollment,
---     submission_history,
+--     submission,
 --     assignment,
 --     resource,
 --     notification,
@@ -118,14 +118,14 @@ CREATE TABLE assignment (
     description TEXT
 );
 
--- Submission History
-CREATE TABLE submission_history (
-    submission_id INT PRIMARY KEY AUTO_INCREMENT,
+-- Submission
+CREATE TABLE submission (
     student_id INT,
     assignment_id INT,
     filepath VARCHAR(255),
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    score FLOAT
+    score FLOAT,
+    PRIMARY KEY (student_id, assignment_id)
 );
 
 -- notification
@@ -178,8 +178,8 @@ ALTER TABLE teaching_assignment
 ALTER TABLE assignment
     ADD CONSTRAINT fk_assignment_teacher FOREIGN KEY (teacher_id) REFERENCES teacher(id),
     ADD CONSTRAINT fk_assignment_open_course FOREIGN KEY (open_course_id) REFERENCES open_course(open_course_id);
--- submission_history
-ALTER TABLE submission_history
+-- submission
+ALTER TABLE submission
     ADD CONSTRAINT fk_submission_student FOREIGN KEY (student_id) REFERENCES student(id),
     ADD CONSTRAINT fk_submission_assignment FOREIGN KEY (assignment_id) REFERENCES assignment(assignment_id);
 

@@ -2,7 +2,7 @@ package com.edusmart.course.mapper;
 
 import com.edusmart.assignment.dto.AssignmentInfoDTO;
 import com.edusmart.assignment.mapper.AssignmentMapper;
-import com.edusmart.course.dto.CourseInfoDTO;
+import com.edusmart.course.dto.CourseDetailDTO;
 import com.edusmart.course.dto.StudentInCourseDTO;
 import com.edusmart.course.model.Course;
 import com.edusmart.course.model.OpenCourse;
@@ -12,7 +12,6 @@ import com.edusmart.notification.dto.NotificationDTO;
 import com.edusmart.notification.mapper.NotificationMapper;
 import com.edusmart.resource.dto.ResourceInfoDTO;
 import com.edusmart.resource.mapper.ResourceMapper;
-import com.edusmart.resource.model.Resource;
 import com.edusmart.user.dto.CourseTeacherDTO;
 import com.edusmart.user.mapper.StudentMapper;
 import com.edusmart.user.mapper.TeacherMapper;
@@ -54,7 +53,7 @@ public class MyCourseMapper {
                 enrollment.getStatus(),
                 teachers);
     }
-    public CourseInfoDTO toCourseInfoDTO(OpenCourse openCourse){
+    public CourseDetailDTO toCoursDetailDTO(OpenCourse openCourse, int student_id){
         Course course = openCourse.getCourse();
         List<ResourceInfoDTO> resources = openCourse.getResources()
                 .stream()
@@ -73,7 +72,7 @@ public class MyCourseMapper {
 
         List<AssignmentInfoDTO> assignments = openCourse.getAssignments()
                 .stream()
-                .map(assignmentMapper::toAssignemntInfoDTO)
+                .map(a-> assignmentMapper.toAssignemntInfoDTO(a, student_id))
                 .toList();
 
         List<NotificationDTO> notifications = openCourse.getNotifications()
@@ -81,7 +80,7 @@ public class MyCourseMapper {
                 .map(notificationMapper::toNotificationDTO)
                 .toList();
 
-        return new CourseInfoDTO(
+        return new CourseDetailDTO(
                 course.getCourse_name(),
                 course.getCourse_code(),
                 course.getCredits(),

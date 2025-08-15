@@ -1,10 +1,9 @@
 package com.edusmart.user.model;
 
-import com.edusmart.assignment.model.SubmissionHistory;
+import com.edusmart.assignment.model.Submission;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +21,5 @@ public class Student extends User {
     private int total_credits;
     private String type;
     @OneToMany(mappedBy = "student")
-    List<SubmissionHistory> submissionHistory;
+    List<Submission> submission_history;
 }

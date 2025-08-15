@@ -1,5 +1,6 @@
 package com.edusmart.assignment.model;
 
+import com.edusmart.assignment.model.id.SubmissionId;
 import com.edusmart.user.model.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,21 +10,21 @@ import java.sql.Timestamp;
 
 
 @Entity
-@Table(name = "submission_history")
+@Table(name = "submission")
 @Getter
 @Setter
-public class SubmissionHistory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int submission_id;
+public class Submission {
+    @EmbeddedId
+    private SubmissionId submission_id;
     private Timestamp submitted_at;
     private String filepath;
     private float score;
     @ManyToOne
+    @MapsId("student_id")
     @JoinColumn(name = "student_id")
     private Student student;
     @ManyToOne
+    @MapsId("assignment_id")
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
-
 }

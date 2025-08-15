@@ -1,11 +1,10 @@
 package com.edusmart.course.controller;
 
-import com.edusmart.course.dto.CourseInfoDTO;
+import com.edusmart.course.dto.CourseDetailDTO;
 import com.edusmart.course.service.CourseService;
 import com.edusmart.course.dto.MyCourseDTO;
 import com.edusmart.dto.ApiResponse;
 import com.nimbusds.jose.JOSEException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -30,7 +29,9 @@ public class CourseController {
     }
 
     @GetMapping("/my-courses/{open_course_id}")
-    public ApiResponse<CourseInfoDTO> getCourseInfoByOpenCourseId(@PathVariable int open_course_id) {
-        return courseService.getCourseDetailByOpenCourseId(open_course_id);
+    public ApiResponse<CourseDetailDTO> getCourseInfoByOpenCourseId(
+            @PathVariable int open_course_id,
+            @RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
+        return courseService.getCourseDetailByOpenCourseId(open_course_id, authHeader);
     }
 }

@@ -153,23 +153,23 @@ INSERT INTO assignment (assignment_id, teacher_id, open_course_id, title, start_
 (5, 4, 4, 'Bài tập về Cung và Cầu', '2025-03-05 08:00:00', '2025-03-12 23:59:59', 15.0, '/assignments/ec101/supply_demand.pdf', 'Giải các bài tập về đường cung và đường cầu'),
 (6, 5, 5, 'Writing assignment: My Future Career', '2025-03-20 08:00:00', '2025-03-27 23:59:59', 10.0, '/assignments/en101/career_essay.pdf', 'Write a 300-word essay about your future career plans');
 
--- Insert submission_history
-INSERT INTO submission_history (submission_id, student_id, assignment_id, filepath, submitted_at, score) VALUES
-(1, 8, 1, '/submissions/sv001/assignment1.cpp', '2025-03-07 15:30:00', 8.5),
-(2, 9, 1, '/submissions/sv002/assignment1.cpp', '2025-03-06 20:15:00', 9.0),
-(3, 10, 1, '/submissions/sv003/assignment1.cpp', '2025-03-08 22:45:00', 6.5),
-(4, 16, 1, '/submissions/sv009/assignment1.cpp', '2025-03-07 18:20:00', 8.0),
-(5, 8, 2, '/submissions/sv001/assignment2.cpp', '2025-03-21 14:10:00', 7.5),
-(6, 9, 2, '/submissions/sv002/assignment2.cpp', '2025-03-20 16:30:00', 9.5),
-(7, 10, 2, '/submissions/sv003/assignment2.cpp', '2025-03-22 23:30:00', 5.5),
-(8, 8, 3, '/submissions/sv001/stack_project.cpp', '2025-03-23 19:45:00', 17.0),
-(9, 9, 3, '/submissions/sv002/stack_project.cpp', '2025-03-22 10:20:00', 19.5),
-(10, 10, 3, '/submissions/sv003/stack_project.cpp', '2025-03-24 23:55:00', 12.0),
-(11, 11, 5, '/submissions/sv004/supply_demand.pdf', '2025-03-11 16:40:00', 12.5),
-(12, 12, 5, '/submissions/sv005/supply_demand.pdf', '2025-03-12 14:25:00', 13.0),
-(13, 17, 5, '/submissions/sv010/supply_demand.pdf', '2025-03-10 20:10:00', 14.0),
-(14, 13, 6, '/submissions/sv006/career_essay.docx', '2025-03-26 11:30:00', 8.5),
-(15, 8, 6, '/submissions/sv001/career_essay.docx', '2025-03-25 15:20:00', 7.0);
+-- Insert submission
+INSERT INTO submission (student_id, assignment_id, filepath, submitted_at, score) VALUES
+(8, 1, '/submissions/sv001/assignment1.cpp', '2025-03-07 15:30:00', 8.5),
+(9, 1, '/submissions/sv002/assignment1.cpp', '2025-03-06 20:15:00', 9.0),
+(10, 1, '/submissions/sv003/assignment1.cpp', '2025-03-08 22:45:00', 6.5),
+(16, 1, '/submissions/sv009/assignment1.cpp', '2025-03-07 18:20:00', 8.0),
+(8, 2, '/submissions/sv001/assignment2.cpp', '2025-03-21 14:10:00', 7.5),
+(9, 2, '/submissions/sv002/assignment2.cpp', '2025-03-20 16:30:00', 9.5),
+(10, 2, '/submissions/sv003/assignment2.cpp', '2025-03-22 23:30:00', 5.5),
+(8, 3, '/submissions/sv001/stack_project.cpp', '2025-03-23 19:45:00', 17.0),
+(9, 3, '/submissions/sv002/stack_project.cpp', '2025-03-22 10:20:00', 19.5),
+(10, 3, '/submissions/sv003/stack_project.cpp', '2025-03-24 23:55:00', 12.0),
+(11, 5, '/submissions/sv004/supply_demand.pdf', '2025-03-11 16:40:00', 12.5),
+(12, 5, '/submissions/sv005/supply_demand.pdf', '2025-03-12 14:25:00', 13.0),
+(17, 5, '/submissions/sv010/supply_demand.pdf', '2025-03-10 20:10:00', 14.0),
+(13, 6, '/submissions/sv006/career_essay.docx', '2025-03-26 11:30:00', 8.5),
+(8, 6, '/submissions/sv001/career_essay.docx', '2025-03-25 15:20:00', 7.0);
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
