@@ -17,6 +17,7 @@ import com.edusmart.user.mapper.StudentMapper;
 import com.edusmart.user.mapper.TeacherMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -78,6 +79,7 @@ public class MyCourseMapper {
         List<NotificationDTO> notifications = openCourse.getNotifications()
                 .stream()
                 .map(notificationMapper::toNotificationDTO)
+                .sorted(Comparator.comparing(NotificationDTO::created_at).reversed())
                 .toList();
 
         return new CourseDetailDTO(

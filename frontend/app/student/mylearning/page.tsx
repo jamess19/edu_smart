@@ -72,10 +72,6 @@ export default function StudentCourses() {
   }
 
 
-  const getCurrentCredits = () => {
-    return currentCourses.reduce((total, course) => total + Number(course.credits), 0)
-  }
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -364,7 +360,6 @@ export default function StudentCourses() {
                           </div>
                         </div>
 
-                        {/* Teachers Section - THÊM MỚI */}
                         <div className="space-y-2">
                           <div className="flex items-center gap-1 text-xs font-medium text-gray-600 uppercase tracking-wide">
                             <Users className="w-3 h-3" />
@@ -455,22 +450,15 @@ export default function StudentCourses() {
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex gap-2">
+                          <Link href={`/student/courses/${course.course_id}`}>
                             <Button
                               variant="outline"
-                              className="flex-1 text-sm"
+                              className="flex-1 text-sm w-full"
                             >
                               <FileText className="w-4 h-4 mr-1" />
                               Chi tiết
                             </Button>
-                            <Button
-                              variant="outline"
-                              className="flex-1 text-sm"
-                            >
-                              <Trophy className="w-4 h-4 mr-1" />
-                              Kết quả
-                            </Button>
-                          </div>
+                          </Link>
                         </div>
                       </CardContent>
                     </Card>
