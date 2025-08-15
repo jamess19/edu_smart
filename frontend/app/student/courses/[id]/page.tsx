@@ -99,7 +99,11 @@ export default function CourseDetail() {
     setSelectedAssignment(assignment)
     setIsViewSubmissionOpen(true)
   }
-
+const isOverdue = (dueDate: string) => {
+  const now = new Date();
+  const deadline = new Date(dueDate);
+  return now > deadline;
+}
   return (
     <div className="space-y-6 w-full">
       {/* Course Header */}
@@ -211,6 +215,7 @@ export default function CourseDetail() {
               {assignments.map((assignment) => (
                 <div key={assignment.assignment_id.toString()} className="flex items-center justify-between p-3 border rounded-l rounded-sm">
                   <div className="flex-1">
+
                     <h3 className="font-semibold gap-2 mb-2">{assignment.title}</h3>
                     <div className="flex flex-wrap gap-3 text-xs text-gray-500">
                       <Button
@@ -252,46 +257,76 @@ export default function CourseDetail() {
                   <div className="flex flex-col sm:flex-row gap-2">
                     {assignment.submission != null ? (
                       <>
-                        {/* Đã nộp bài - có thể xem và nộp lại */}
+                        {/* Đã nộp bài - luôn hiển thị nút xem */}
                         <Button
                           size="sm"
                           variant="outline"
                           className="text-xs bg-transparent"
                           onClick={() => {
-                            console.log("Opening view submission modal for:", assignment); // Debug
+                            console.log("Opening view submission modal for:", assignment);
                             openViewSubmissionModal(assignment);
                           }}
                         >
                           <Eye className="w-3 h-3 mr-1" />
                           Xem bài nộp
                         </Button>
-                        <Button 
-                          size="sm" 
-                          className="text-xs" 
-                          onClick={() => {
-                            openSubmissionModal(assignment);
-                          }}
-                        >
-                          <Upload className="w-3 h-3 mr-1" />
-                          Nộp lại
-                        </Button>
+                        
+                        {/* Chỉ hiển thị nút "Nộp lại" nếu chưa quá hạn */}
+                        {!isOverdue(assignment.due_date) && (
+                          <Button 
+                            size="sm" 
+                            className="text-xs" 
+                            onClick={() => {
+                              openSubmissionModal(assignment);
+                            }}
+                          >
+                            <Upload className="w-3 h-3 mr-1" />
+                            Nộp lại
+                          </Button>
+                        )}
+                        
+                        {/* Hiển thị badge "Đã nộp" nếu đã quá hạn */}
+                        {isOverdue(assignment.due_date) && (
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="text-xs text-green-600 border-green-200 bg-green-50"
+                            disabled
+                          >
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Đã nộp
+                          </Button>
+                        )}
                       </>
                     ) : (
                       <>
-                        <Button 
-                          size="sm" 
-                          className="text-xs" 
-                          onClick={() => {
-                            openSubmissionModal(assignment);
-                          }}
-                        >
-                          <Upload className="w-3 h-3 mr-1" />
-                          Nộp bài
-                        </Button>
+                        {/* Chưa nộp bài */}
+                        {!isOverdue(assignment.due_date) ? (
+                          <Button 
+                            size="sm" 
+                            className="text-xs" 
+                            onClick={() => {
+                              openSubmissionModal(assignment);
+                            }}
+                          >
+                            <Upload className="w-3 h-3 mr-1" />
+                            Nộp bài
+                          </Button>
+                        ) : (
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="text-xs text-red-600 border-red-200 bg-red-50"
+                            disabled
+                          >
+                            <X className="w-3 h-3 mr-1" />
+                            Hết hạn
+                          </Button>
+                        )}
                       </>
                     )}
-                        </div>
-                      </div>
+                  </div>
+                </div>
                   ))}
             </CardContent>
           </Card>
