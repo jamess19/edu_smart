@@ -15,3 +15,9 @@ export interface StudentInCourse {
     fullname: String,
     student_code: string
 }
+
+export interface StudentBaseInfo {
+  student_code: string
+  major: string
+  student_type: 'regular' | 'transfer' | 'international'
+}

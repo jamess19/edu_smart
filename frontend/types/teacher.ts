@@ -4,3 +4,10 @@ export interface AssignedTeacher {
     email: string,
     role: string
 }
+
+export interface TeacherInfo {
+  teacher_code: string
+  research_field: string
+  experience_years: number
+  degree: string
+}
