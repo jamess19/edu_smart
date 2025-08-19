@@ -4,27 +4,16 @@ import com.edusmart.auth.dto.IntrospectRequest;
 import com.edusmart.auth.dto.IntrospectResponse;
 import com.edusmart.auth.dto.LoginRequest;
 import com.edusmart.auth.dto.LoginResponse;
-import com.edusmart.common.exception.ErrorCode;
 import com.edusmart.dto.ApiResponse;
-import com.edusmart.user.mapper.UserMapper;
 import com.edusmart.user.model.User;
 import com.edusmart.user.repository.UserRepository;
 import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -38,7 +27,7 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public ApiResponse<LoginResponse> login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByUsername(loginRequest.username())
                 .or(() -> Optional.empty());
 
@@ -52,9 +41,9 @@ public class AuthService {
                     .token(token)
                     .role(user.get().getUser_type())
                     .build();
-            return ApiResponse.success(loginResponse, "login success");
+            return loginResponse;
         }
-        return ApiResponse.error(ErrorCode.NOT_FOUND);
+        return null;
     }
 
     public ApiResponse<IntrospectResponse> introspect(IntrospectRequest request)

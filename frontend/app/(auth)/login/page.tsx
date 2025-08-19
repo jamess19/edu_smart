@@ -11,27 +11,65 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BookOpen, Users, GraduationCap } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { authService } from "@/services/authService"
-
+import {toast} from "sonner"
 export default function LoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [userType, setUserType] = useState("student")
   const router = useRouter()
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await authService.login(username, password);
-    console.log("data:", res.data.token)
-    if(res) {
-      localStorage.setItem("token", res.data.token);
-      switch (userType) {
-        case "student":
-          router.push("/student/home");
-          break;
-        case "teacher":
-          router.push("/teacher");
-          break;
+    try {
+      const res = await authService.login(username, password);
+      console.log("data:", res.data.token)
+      if(res) {
+        toast.dismiss("login-loading")
+        localStorage.setItem("token", res.data.token);
+                toast.success(`Chào mừng ${res.data.fullname || username}! 🎉`, {
+            description: `Đăng nhập thành công với vai trò ${res.data.role === 'student' ? 'Sinh viên' : 'Giảng viên'}`,
+            duration: 2000,
+          })
+
+        // ✅ Delay navigation để user thấy toast
+        setTimeout(() => {
+          switch (res.data.role) {
+            case "student":
+              router.push("/student/mylearning")
+              break
+            case "teacher":
+              router.push("/teacher")
+              break
+            default:
+              router.push("/")
+            }
+          }, 1500) // 1.5s delay
       }
+      else {
+          toast.dismiss("login-loading")
+          toast.error("Đăng nhập thất bại!", {
+            description: "Thông tin đăng nhập không chính xác"
+          })
+        }
+    }
+    catch (error: any) {
+      console.error("Login error:", error)
+      toast.dismiss("login-loading")
+      
+      // ✅ Handle different error types
+      const errorMessage = error.response?.data?.message || 
+                          error.message || 
+                          "Có lỗi xảy ra khi đăng nhập"
+      
+      toast.error("Đăng nhập thất bại!", {
+        description: errorMessage,
+        action: {
+          label: "Thử lại",
+          onClick: () => {
+            setUsername("")
+            setPassword("")
+          }
+        }}
+      )
     }
   }
 

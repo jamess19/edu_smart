@@ -13,15 +13,11 @@ import com.edusmart.user.repository.StudentRepository;
 import com.edusmart.user.repository.TeacherRepository;
 import com.edusmart.user.repository.UserRepository;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.MACVerifier;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.Optional;
 
 
 @Service
