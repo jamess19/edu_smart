@@ -55,13 +55,24 @@ public class SecurityConfig {
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
                         .permitAll().anyRequest().authenticated()) // có thể match các request với method và endpoint chỉ định với quyền authority
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> {});
+                .cors(cors -> {})
+                .oauth2Login(oauth2 -> oauth2.loginPage("/login")
+                        .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/login")
+                )
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
+        ;
 //                .authenticationManager(authenticationManager()); // <- last step: add this to tell filter chain use your custom authentication manager
         // Xem lại phần này
         http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
         return http.build();
     }
-
+//    Click login with ..., gọi api getLoginURL -> trả ra url để route tới
+//    xong ròi xử lý frontend nhận code từ bên thứ 3, xong r bên thứ 3 recirect về redirect uri, mình xử lý
+//    gửi code về gọi login?loginType = ? để đổi access token của google hoặc facebook,
+//    xong ròi so sánh mail, user này nọ, rồi gen token để truy cập ứng dụng rồi trả lại và login thành công
+//     lƯU Ý: Google/Facebook token là token giúp xác thực và lấy được dữ liệu từ các nền tảng đó của người dùng
+//    của mình, còn JWT token mà mình gen là để người dùng lấy dữ liệu của database của mình
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();

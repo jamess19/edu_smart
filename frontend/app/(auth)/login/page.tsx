@@ -39,8 +39,8 @@ export default function LoginPage() {
             case "teacher":
               router.push("/teacher")
               break
-            default:
-              router.push("/")
+            case "admin":
+              router.push("/admin/dashboard")
             }
           }, 1500) // 1.5s delay
       }

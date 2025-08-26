@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import com.edusmart.department.model.Department;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

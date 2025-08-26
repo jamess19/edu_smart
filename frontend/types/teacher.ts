@@ -1,3 +1,5 @@
+import { UserData } from "./user"
+
 export interface AssignedTeacher {
     teacher_code: string,
     fullname: string,
@@ -5,7 +7,7 @@ export interface AssignedTeacher {
     role: string
 }
 
-export interface TeacherInfo {
+export interface TeacherBaseInfo extends UserData {
   teacher_code: string
   research_field: string
   experience_years: number

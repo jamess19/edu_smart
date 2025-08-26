@@ -3,6 +3,7 @@ package com.edusmart.user.service;
 import com.edusmart.auth.service.JwtService;
 import com.edusmart.common.exception.ErrorCode;
 import com.edusmart.dto.ApiResponse;
+import com.edusmart.user.dto.UserInfor;
 import com.edusmart.user.mapper.StudentMapper;
 import com.edusmart.user.mapper.TeacherMapper;
 import com.edusmart.user.mapper.UserMapper;
@@ -16,8 +17,10 @@ import com.nimbusds.jose.JOSEException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.List;
 
 
 @Service
@@ -49,7 +52,6 @@ public class UserService {
      public ApiResponse<?> getCurrentUser(String authHeader) throws ParseException, JOSEException {
          String token = authHeader.replace("Bearer ", "");
          JSONObject jwtObject = jwtService.decode(token);
-         String role = jwtObject.get("scope").toString();
          int userId = Integer.parseInt(jwtObject.get("userId").toString());
 
          User user = userRepository.findById(userId).orElse(null);
@@ -62,5 +64,21 @@ public class UserService {
          }
          return ApiResponse.error(ErrorCode.NOT_FOUND);
      }
+        public List<UserInfor> getAllUsers() {
+            return userRepository.findAll().stream().map(userMapper::toUserInfor).toList();
+        }
+        @Transactional(rollbackFor = Exception.class)
+        public User createUser(User user) {
+            if (user instanceof Student) {
+                Student student = (Student) user;
+                return studentRepository.save(student);
+            }
+            else if (user instanceof Teacher) {
+                Teacher teacher = (Teacher) user;
+                return teacherRepository.save(teacher);
+            }
+            return userRepository.save(user);
+        }
+
 }
 

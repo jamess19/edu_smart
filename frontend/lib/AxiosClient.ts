@@ -16,16 +16,20 @@ apiClient.interceptors.request.use((config) => {
     const isPublicEndpoint = publicEndpoints.some(endpoint => 
       config.url?.includes(endpoint)
     );
-  if (!isPublicEndpoint && typeof window !== 'undefined') {
+  if (!isPublicEndpoint) {
     const token = localStorage.getItem('token');
     if (token) {
       console.log(token);
       config.headers.Authorization = `Bearer ${token}`;
     }
+    else {
+      console.log("Can't get token")
+    }
   }
   console.log('Request:', {
       url: config.url,
       method: config.method,
+      token: config.headers.Authorization ? true : false,
       isPublic: isPublicEndpoint
     });
   return config;}

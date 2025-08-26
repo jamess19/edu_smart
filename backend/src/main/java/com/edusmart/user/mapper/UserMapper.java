@@ -18,7 +18,9 @@ public class UserMapper {
                 user.getEmail(),
                 user.getBirthday(),
                 user.getUser_type(),
-                user.getDepartment().getDepartment_name()
+                user.getDepartment().getDepartment_name(),
+                user.getCreated_at(),
+                user.getUpdated_at()
         );
     }
 }

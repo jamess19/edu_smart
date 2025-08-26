@@ -1,5 +1,3 @@
-import { StudentBaseInfo } from "./student"
-import { TeacherInfo } from "./teacher"
 
 export interface userInfo {
     id: Number,
@@ -9,10 +7,12 @@ export interface userInfo {
     email: string, 
     birthday: string,
     user_type: string,
-    departmentName: string
+    departmentName: string,
+    created_at: string,
+    updated_at: string
 }
 
-export interface BaseUser {
+export interface UserData {
   username: string
   password: string
   email: string
@@ -20,11 +20,5 @@ export interface BaseUser {
   address: string
   birthday: Date | undefined
   department_id: number
-  role: 'student' | 'teacher' | 'admin'
-}
-
-
-export interface NewUser extends BaseUser {
-  teacher_info?: TeacherInfo
-  student_info?: StudentBaseInfo
+  role: 'student' | 'teacher' | ""
 }

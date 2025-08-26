@@ -54,8 +54,6 @@ export default function CourseDetail() {
   const [assignments, setAssignments] = useState<AssignmentInCourse[]>([])
   const [notifications, setNotifications] = useState<NotificationInCourse[]>([])
   const [courseData, setCourseData] = useState<CourseInDetail|null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
   // lấy thông tin khoá học theo ID
   const course_id = params.id;

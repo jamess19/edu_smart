@@ -7,41 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Plus, Search, Filter } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { userInfo } from "@/types/user"
 
-// Mock data for demonstration
-const mockUsers = [
-  {
-    id: 1,
-    username: "john_doe",
-    fullname: "John Doe",
-    email: "john@example.com",
-    role: "teacher",
-    department: "Khoa Công nghệ thông tin",
-    createdAt: "2024-01-15",
-  },
-  {
-    id: 2,
-    username: "jane_smith",
-    fullname: "Jane Smith",
-    email: "jane@example.com",
-    role: "student",
-    department: "Khoa Kinh tế",
-    createdAt: "2024-01-20",
-  },
-  {
-    id: 3,
-    username: "mike_wilson",
-    fullname: "Mike Wilson",
-    email: "mike@example.com",
-    role: "teacher",
-    department: "Khoa Toán học",
-    createdAt: "2024-01-25",
-  },
-]
-
-export function UserList() {
+interface userListProps {
+  users: userInfo[]
+}
+export function UserList({users}: userListProps) {
   const [searchTerm, setSearchTerm] = useState("")
-  const [users] = useState(mockUsers)
 
   const filteredUsers = users.filter(
     (user) =>
@@ -83,15 +55,15 @@ export function UserList() {
       {/* Users grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredUsers.map((user) => (
-          <Card key={user.id} className="hover:shadow-md transition-shadow">
+          <Card key={user.id.toString()} className="hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div>
                   <CardTitle className="text-lg">{user.fullname}</CardTitle>
                   <p className="text-sm text-muted-foreground">@{user.username}</p>
                 </div>
-                <Badge variant={user.role === "teacher" ? "default" : "secondary"}>
-                  {user.role === "teacher" ? "Giáo viên" : "Học sinh"}
+                <Badge variant={user.user_type === "teacher" ? "default" : "secondary"}>
+                  {user.user_type === "teacher" ? "Giáo viên" : "Học sinh"}
                 </Badge>
               </div>
             </CardHeader>
@@ -102,11 +74,11 @@ export function UserList() {
               </div>
               <div>
                 <p className="text-sm font-medium">Khoa</p>
-                <p className="text-sm text-muted-foreground">{user.department}</p>
+                <p className="text-sm text-muted-foreground">{user.departmentName}</p>
               </div>
               <div>
-                <p className="text-sm font-medium">Ngày tạo</p>
-                <p className="text-sm text-muted-foreground">{user.createdAt}</p>
+                <p className="text-sm font-medium">Điạ chỉ</p>
+                <p className="text-sm text-muted-foreground">{user.address}</p>
               </div>
             </CardContent>
           </Card>

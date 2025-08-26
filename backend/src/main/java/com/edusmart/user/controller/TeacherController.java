@@ -3,12 +3,10 @@ package com.edusmart.user.controller;
 import com.edusmart.common.exception.ErrorCode;
 import com.edusmart.dto.ApiResponse;
 import com.edusmart.user.dto.TeacherInfoDTO;
+import com.edusmart.user.model.Teacher;
 import com.edusmart.user.service.TeacherService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -28,6 +26,4 @@ public class TeacherController {
         }
         return ApiResponse.error(ErrorCode.NOT_FOUND);
     }
-
-
 }

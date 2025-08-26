@@ -1,6 +1,8 @@
 package com.edusmart.user.dto;
 
 import lombok.Builder;
+
+import java.sql.Timestamp;
 import java.util.Date;
 @Builder
 
@@ -14,6 +16,8 @@ public record UserInfor(
         String email,
         Date birthday,
         String user_type,
-        String departmentName
+        String departmentName,
+        Timestamp created_at,
+        Timestamp updated_at
 ) {
 }

@@ -1,18 +1,16 @@
 package com.edusmart.user.controller;
 
-import com.edusmart.common.exception.ErrorCode;
 import com.edusmart.dto.ApiResponse;
 import com.edusmart.user.dto.UserInfor;
 import com.edusmart.user.model.User;
-import com.edusmart.user.service.StudentService;
-import com.edusmart.user.service.TeacherService;
 import com.edusmart.user.service.UserService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.Optional;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -30,6 +28,17 @@ public class UserController {
          return userService.getCurrentUser(authHeader);
      }
 
+     @PostMapping()
+    public ApiResponse<User> createUser(@RequestBody User user) {
+        User newuser = userService.createUser(user);
+        return ApiResponse.success(newuser, null);
+     }
+
+     @GetMapping()
+    public ApiResponse<List<UserInfor>> getAllUsers() {
+        List<UserInfor> users = userService.getAllUsers();
+        return ApiResponse.success(users, null);
+     }
 //    @GetMapping("/{id}")
 //    public ApiResponse<UserInfor> getUserById(@PathVariable int id) {
 //

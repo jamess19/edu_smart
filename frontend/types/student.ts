@@ -1,3 +1,4 @@
+import { UserData } from "./user"
 export interface StudentInfo {
     fullname: String,
     email: String,
@@ -16,8 +17,8 @@ export interface StudentInCourse {
     student_code: string
 }
 
-export interface StudentBaseInfo {
+export interface StudentBaseInfo extends UserData {
   student_code: string
   major: string
-  student_type: 'regular' | 'transfer' | 'international'
+  student_type: 'Chính quy' | 'CTDA' | 'Từ xa'
 }
