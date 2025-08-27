@@ -21,17 +21,16 @@ public class CourseController {
     }
 
     @GetMapping("/my-courses")
-    public ApiResponse<List<MyCourseDTO>> getAllMyCourses(
-            @RequestHeader("Authorization") String authHeader)
+    public ApiResponse<List<MyCourseDTO>> getAllMyCourses()
             throws ParseException, JOSEException {
-        List<MyCourseDTO> myCourses = courseService.getAllMyCourses(authHeader);
+        List<MyCourseDTO> myCourses = courseService.getAllMyCourses();
+
         return ApiResponse.success(myCourses, "");
     }
 
     @GetMapping("/my-courses/{open_course_id}")
     public ApiResponse<CourseDetailDTO> getCourseInfoByOpenCourseId(
-            @PathVariable int open_course_id,
-            @RequestHeader("Authorization") String authHeader) throws ParseException, JOSEException {
-        return courseService.getCourseDetailByOpenCourseId(open_course_id, authHeader);
+            @PathVariable int open_course_id) {
+        return courseService.getCourseDetailByOpenCourseId(open_course_id);
     }
 }

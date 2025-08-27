@@ -8,7 +8,8 @@ export const authService = {
             {
                 username, 
                 password
-            }
+            },
+            {withCredentials : true}
         );
         return res.data;
     },

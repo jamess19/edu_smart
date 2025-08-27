@@ -97,7 +97,7 @@ public class UserService {
                 Teacher teacher = (Teacher) user;
                 return userMapper.toUserInfor(teacherRepository.save(teacher));
             }
-            return userMapper.toUserInfor(userRepository.save(user));
+            return null;
         }
 
 }

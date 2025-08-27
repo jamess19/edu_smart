@@ -1,6 +1,9 @@
 package com.edusmart.user.model;
 
 import com.edusmart.assignment.model.Submission;
+import com.edusmart.course.model.OpenCourse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -21,6 +24,7 @@ public class Student extends User {
     private int total_credits;
     private String type;
     @OneToMany(mappedBy = "student")
+    @JsonIgnore
     List<Submission> submission_history;
 
     public Student() {

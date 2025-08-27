@@ -27,24 +27,24 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public LoginResponse login(LoginRequest loginRequest) {
-        Optional<User> user = userRepository.findByUsername(loginRequest.username())
-                .or(() -> Optional.empty());
-
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        if (user.isPresent()
+//    public LoginResponse login(LoginRequest loginRequest) {
+//        Optional<User> user = userRepository.findByUsername(loginRequest.username())
+//                .or(() -> Optional.empty());
+//
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+//        if (user.isPresent()
 //                && passwordEncoder.matches(loginRequest.password(), user.get().getPassword())
-        ) {
-            // generate token
-            var token = jwtService.generateToken(user.get().getUsername());
-            var loginResponse = LoginResponse.builder()
-                    .token(token)
-                    .role(user.get().getUser_type())
-                    .build();
-            return loginResponse;
-        }
-        return null;
-    }
+//        ) {
+//            // generate token
+//            var token = jwtService.generateToken(user.get().getUsername());
+//            var loginResponse = LoginResponse.builder()
+//                    .token(token)
+//                    .role(user.get().getUser_type())
+//                    .build();
+//            return loginResponse;
+//        }
+//        return null;
+//    }
 
     public ApiResponse<IntrospectResponse> introspect(IntrospectRequest request)
             throws JOSEException, ParseException {
