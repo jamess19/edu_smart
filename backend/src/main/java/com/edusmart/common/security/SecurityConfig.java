@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -40,39 +42,34 @@ public class SecurityConfig {
     @Value("${jwt.secret}")
     private String SIGNER_KEY;
     private CustomUserDetailService userDetailsService;
-    @Autowired
-    public SecurityConfig(CustomUserDetailService userDetailServices) {
+    private final JwtAuthenticationFilter jwtFilter;
+    public SecurityConfig(CustomUserDetailService userDetailServices, JwtAuthenticationFilter jwtFilter) {
         this.userDetailsService = userDetailServices;
+        this.jwtFilter = jwtFilter;
     }
-
     // cấu hình securityFilterChain
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception{
         // endpoint register va login la public
-        String[] PUBLIC_ENDPOINT = {"/api/v1/auth/**"};
+        String[] PUBLIC_ENDPOINT = {"/api/v1/auth/**", "/api/v1/users"};
 
         http.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
                         .permitAll().anyRequest().authenticated()) // có thể match các request với method và endpoint chỉ định với quyền authority
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> {})
-                .oauth2Login(oauth2 -> oauth2.loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true)
-                        .failureUrl("/login")
-                )
-                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
-        ;
-//                .authenticationManager(authenticationManager()); // <- last step: add this to tell filter chain use your custom authentication manager
-        // Xem lại phần này
-        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())));
+                .authenticationManager(authenticationManager()) // <- last step: add this to tell filter chain use your custom authentication manager
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 //    Click login with ..., gọi api getLoginURL -> trả ra url để route tới
 //    xong ròi xử lý frontend nhận code từ bên thứ 3, xong r bên thứ 3 recirect về redirect uri, mình xử lý
 //    gửi code về gọi login?loginType = ? để đổi access token của google hoặc facebook,
 //    xong ròi so sánh mail, user này nọ, rồi gen token để truy cập ứng dụng rồi trả lại và login thành công
-//     lƯU Ý: Google/Facebook token là token giúp xác thực và lấy được dữ liệu từ các nền tảng đó của người dùng
-//    của mình, còn JWT token mà mình gen là để người dùng lấy dữ liệu của database của mình
+//    Xử dụng token đó nhờ bên thứ 3 validate hộ mỗi lần nhận request và xác thực cho database của mình luôn
+
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
@@ -85,13 +82,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-    @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKey = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS256");
-        return NimbusJwtDecoder.withSecretKey(secretKey)
-                .macAlgorithm(MacAlgorithm.HS256)
-                .build();
-    }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);

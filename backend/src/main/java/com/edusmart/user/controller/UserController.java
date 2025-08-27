@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -29,8 +28,8 @@ public class UserController {
      }
 
      @PostMapping()
-    public ApiResponse<User> createUser(@RequestBody User user) {
-        User newuser = userService.createUser(user);
+    public ApiResponse<UserInfor> createUser(@RequestBody User user) {
+        UserInfor newuser = userService.createUser(user);
         return ApiResponse.success(newuser, null);
      }
 

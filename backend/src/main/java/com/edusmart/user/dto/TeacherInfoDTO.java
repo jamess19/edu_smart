@@ -8,7 +8,6 @@ import java.util.Date;
 public record TeacherInfoDTO(
         int id,
         String username,
-        String password,
         String fullname,
         String address,
         String email,

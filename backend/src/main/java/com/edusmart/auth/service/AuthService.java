@@ -36,7 +36,7 @@ public class AuthService {
 //                && passwordEncoder.matches(loginRequest.password(), user.get().getPassword())
         ) {
             // generate token
-            var token = jwtService.generateToken(user.get());
+            var token = jwtService.generateToken(user.get().getUsername());
             var loginResponse = LoginResponse.builder()
                     .token(token)
                     .role(user.get().getUser_type())

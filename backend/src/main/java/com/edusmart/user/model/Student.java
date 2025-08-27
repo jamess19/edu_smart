@@ -22,4 +22,8 @@ public class Student extends User {
     private String type;
     @OneToMany(mappedBy = "student")
     List<Submission> submission_history;
+
+    public Student() {
+        this.setUser_type("student");
+    }
 }
