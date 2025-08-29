@@ -19,7 +19,7 @@ public class Resource {
     private String filepath;
     @ManyToOne
     @JoinColumn(name = "open_course_id")
-    private OpenCourse opencourse;
+    private OpenCourse open_course;
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;

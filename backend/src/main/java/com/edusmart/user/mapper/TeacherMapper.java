@@ -22,7 +22,6 @@ public class TeacherMapper {
         return new TeacherInfoDTO(
                 teacher.getId(),
                 teacher.getUsername(),
-                teacher.getPassword(),
                 teacher.getFullname(),
                 teacher.getAddress(),
                 teacher.getEmail(),

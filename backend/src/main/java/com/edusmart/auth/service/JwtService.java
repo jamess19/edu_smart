@@ -27,17 +27,15 @@ public class JwtService {
     @Value("${jwt.secret}")
     protected String SIGNER_KEY;
 
-    public String generateToken(User user) {
+    public String generateToken(String username) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         JWTClaimsSet claimSet = new JWTClaimsSet.Builder()
-                .subject(user.getUsername())
+                .subject(username)
                 .issuer("James19")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("userId", user.getId())
-                .claim("scope", user.getUser_type())
                 .build();
 
         Payload payload = new Payload(claimSet.toJSONObject());
@@ -49,6 +47,13 @@ public class JwtService {
         } catch (JOSEException e) {
             throw new RuntimeException(e);
         }
+    }
+    public Boolean verify(String token) throws JOSEException, ParseException {
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        SignedJWT signedJWT = SignedJWT.parse(token);
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        var verified = signedJWT.verify(verifier);
+        return verified && expiryTime.after(new Date());
     }
 
     public ApiResponse<IntrospectResponse> introspect(IntrospectRequest request)
@@ -75,5 +80,17 @@ public class JwtService {
             throw new RuntimeException("Invalid token signature");
         }
         return new JSONObject(parsedObject.getPayload().toJSONObject());
+    }
+
+    public String extractUsername(String token) throws ParseException, JOSEException {
+        JWSObject parsedObject = JWSObject.parse(token);
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        if (!parsedObject.verify(verifier)) {
+            throw new RuntimeException("Invalid token signature");
+        }
+        JSONObject payload = new JSONObject(parsedObject.getPayload().toJSONObject());
+        if(payload.has("username"))
+            return payload.getString("username");
+        return payload.getString("sub");
     }
 }

@@ -115,7 +115,7 @@ INSERT INTO enrollment (enrollment_id, open_course_id, student_id, enrolled_at, 
 (12, 4, 17, '2025-02-16 09:00:00', 'enrolled', NULL, NULL, NULL, NULL, NULL),
 (13, 5, 13, '2025-02-16 13:00:00', 'pass', 8.0, 8.5, 8.2, 8.3, 8.2),
 (14, 5, 8, '2025-02-16 13:30:00', 'fail', 7.0, 7.5, 7.2, 3.8, 4.83),
-(15, 5, 11, '2025-02-16 14:00:00', 'enrolled', NULL, NULL, NULL, NULL, NULL);
+(15, 5, 11, '2025-02-16 14:00:00', 'enrolled', NULL, NULL, NULL, NULL, NULL),
 (16, 3, 16, '2025-08-12 15:30:00', 'pending', NULL, NULL, NULL, NULL, NULL),
 (17, 4, 17, '2025-08-12 09:00:00', 'pending', NULL, NULL, NULL, NULL, NULL),
 (18, 5, 11, '2025-08-12 14:00:00', 'pending', NULL, NULL, NULL, NULL, NULL);
@@ -134,42 +134,42 @@ INSERT INTO resource (resource_id, teacher_id, open_course_id, name, type, filep
 (10, 7, 7, 'Sơ đồ mạch điện', 'diagram', '/resource/ee101/circuit_diagram.pdf');
 
 -- Insert notification
-INSERT INTO notification (notification_id, teacher_id, open_course_id, content, created_at) VALUES
-(1, 2, 1, 'Chào mừng các bạn đến với môn Lập trình căn bản. Buổi học đầu tiên sẽ diễn ra vào thứ 2 tuần tới.', '2025-02-20 08:00:00'),
-(2, 2, 1, 'Nhắc nhở: Bài tập tuần 1 cần nộp trước 17h ngày thứ 6 tuần này.', '2025-02-28 16:00:00'),
-(3, 3, 2, 'Thông báo: Kiểm tra giữa kỳ sẽ diễn ra vào tuần 8, các bạn chuẩn bị kỹ.', '2025-03-15 10:00:00'),
-(4, 2, 3, 'Bài lab tuần này sẽ thực hành thiết kế database cho một ứng dụng thực tế.', '2025-03-20 14:00:00'),
-(5, 4, 4, 'Tài liệu bổ sung về chương 3 đã được upload, các bạn tham khảo thêm.', '2025-03-10 11:00:00'),
-(6, 5, 5, 'English speaking practice session will be held every Friday at 2 PM.', '2025-02-25 13:00:00'),
-(7, 6, 6, 'Lưu ý: Cần mang đầy đủ dụng cụ vẽ cho buổi thực hành tuần tới.', '2025-03-05 09:00:00'),
-(8, 7, 7, 'Thí nghiệm tuần này sẽ đo đạc các thông số mạch RLC, chuẩn bị báo cáo.', '2025-03-12 15:00:00');
+INSERT INTO notification (notification_id, teacher_id, open_course_id, title, content, created_at) VALUES
+(1, 2, 1, 'Chào mừng', 'Chào mừng các bạn đến với môn Lập trình căn bản. Buổi học đầu tiên sẽ diễn ra vào thứ 2 tuần tới.', '2025-02-20 08:00:00'),
+(2, 2, 1, 'Nhắc nhở nộp bài tập', 'Nhắc nhở: Bài tập tuần 1 cần nộp trước 17h ngày thứ 6 tuần này.', '2025-02-28 16:00:00'),
+(3, 3, 2, 'Thông báo kiểm tra giữa kỳ', 'Thông báo: Kiểm tra giữa kỳ sẽ diễn ra vào tuần 8, các bạn chuẩn bị kỹ.', '2025-03-15 10:00:00'),
+(4, 2, 3, 'Thông báo bài lab', 'Bài lab tuần này sẽ thực hành thiết kế database cho một ứng dụng thực tế.', '2025-03-20 14:00:00'),
+(5, 4, 4, 'Tài liệu bổ sung', 'Tài liệu bổ sung về chương 3 đã được upload, các bạn tham khảo thêm.', '2025-03-10 11:00:00'),
+(6, 5, 5, 'English speaking practice', 'English speaking practice session will be held every Friday at 2 PM.', '2025-02-25 13:00:00'),
+(7, 6, 6, 'Lưu ý dụng cụ vẽ', 'Lưu ý: Cần mang đầy đủ dụng cụ vẽ cho buổi thực hành tuần tới.', '2025-03-05 09:00:00'),
+(8, 7, 7, 'Thông báo thí nghiệm', 'Thí nghiệm tuần này sẽ đo đạc các thông số mạch RLC, chuẩn bị báo cáo.', '2025-03-12 15:00:00');
 
 -- Insert assignment
-INSERT INTO assignment (assignment_id, teacher_id, title, start_date, due_date, max_score, filepath, description) VALUES
-(1, 2, 'Bài tập 1: Hello World và biến', '2025-03-01 08:00:00', '2025-03-08 23:59:59', 10.0, '/assignments/it101/assignment1.pdf', 'Viết chương trình Hello World và thực hành với các loại biến cơ bản'),
-(2, 2, 'Bài tập 2: Cấu trúc điều khiển', '2025-03-15 08:00:00', '2025-03-22 23:59:59', 10.0, '/assignments/it101/assignment2.pdf', 'Sử dụng if-else, switch-case, và các vòng lặp'),
-(3, 3, 'Project: Cài đặt Stack bằng Array', '2025-03-10 08:00:00', '2025-03-24 23:59:59', 20.0, '/assignments/it201/stack_project.pdf', 'Cài đặt cấu trúc dữ liệu Stack và các phép toán cơ bản'),
-(4, 2, 'Thiết kế ERD cho hệ thống thư viện', '2025-04-01 08:00:00', '2025-04-15 23:59:59', 25.0, '/assignments/it301/library_erd.pdf', 'Phân tích yêu cầu và thiết kế ERD cho hệ thống quản lý thư viện'),
-(5, 4, 'Bài tập về Cung và Cầu', '2025-03-05 08:00:00', '2025-03-12 23:59:59', 15.0, '/assignments/ec101/supply_demand.pdf', 'Giải các bài tập về đường cung và đường cầu'),
-(6, 5, 'Writing assignment: My Future Career', '2025-03-20 08:00:00', '2025-03-27 23:59:59', 10.0, '/assignments/en101/career_essay.pdf', 'Write a 300-word essay about your future career plans');
+INSERT INTO assignment (assignment_id, teacher_id, open_course_id, title, start_date, due_date, max_score, filepath, description) VALUES
+(1, 2, 1, 'Bài tập 1: Hello World và biến', '2025-03-01 08:00:00', '2025-03-08 23:59:59', 10.0, '/assignments/it101/assignment1.pdf', 'Viết chương trình Hello World và thực hành với các loại biến cơ bản'),
+(2, 2, 1, 'Bài tập 2: Cấu trúc điều khiển', '2025-03-15 08:00:00', '2025-03-22 23:59:59', 10.0, '/assignments/it101/assignment2.pdf', 'Sử dụng if-else, switch-case, và các vòng lặp'),
+(3, 3, 2, 'Project: Cài đặt Stack bằng Array', '2025-03-10 08:00:00', '2025-03-24 23:59:59', 20.0, '/assignments/it201/stack_project.pdf', 'Cài đặt cấu trúc dữ liệu Stack và các phép toán cơ bản'),
+(4, 2, 3, 'Thiết kế ERD cho hệ thống thư viện', '2025-04-01 08:00:00', '2025-04-15 23:59:59', 25.0, '/assignments/it301/library_erd.pdf', 'Phân tích yêu cầu và thiết kế ERD cho hệ thống quản lý thư viện'),
+(5, 4, 4, 'Bài tập về Cung và Cầu', '2025-03-05 08:00:00', '2025-03-12 23:59:59', 15.0, '/assignments/ec101/supply_demand.pdf', 'Giải các bài tập về đường cung và đường cầu'),
+(6, 5, 5, 'Writing assignment: My Future Career', '2025-03-20 08:00:00', '2025-03-27 23:59:59', 10.0, '/assignments/en101/career_essay.pdf', 'Write a 300-word essay about your future career plans');
 
--- Insert submission_history
-INSERT INTO submission_history (submission_id, student_id, assignment_id, filepath, submitted_at, score) VALUES
-(1, 8, 1, '/submissions/sv001/assignment1.cpp', '2025-03-07 15:30:00', 8.5),
-(2, 9, 1, '/submissions/sv002/assignment1.cpp', '2025-03-06 20:15:00', 9.0),
-(3, 10, 1, '/submissions/sv003/assignment1.cpp', '2025-03-08 22:45:00', 6.5),
-(4, 16, 1, '/submissions/sv009/assignment1.cpp', '2025-03-07 18:20:00', 8.0),
-(5, 8, 2, '/submissions/sv001/assignment2.cpp', '2025-03-21 14:10:00', 7.5),
-(6, 9, 2, '/submissions/sv002/assignment2.cpp', '2025-03-20 16:30:00', 9.5),
-(7, 10, 2, '/submissions/sv003/assignment2.cpp', '2025-03-22 23:30:00', 5.5),
-(8, 8, 3, '/submissions/sv001/stack_project.cpp', '2025-03-23 19:45:00', 17.0),
-(9, 9, 3, '/submissions/sv002/stack_project.cpp', '2025-03-22 10:20:00', 19.5),
-(10, 10, 3, '/submissions/sv003/stack_project.cpp', '2025-03-24 23:55:00', 12.0),
-(11, 11, 5, '/submissions/sv004/supply_demand.pdf', '2025-03-11 16:40:00', 12.5),
-(12, 12, 5, '/submissions/sv005/supply_demand.pdf', '2025-03-12 14:25:00', 13.0),
-(13, 17, 5, '/submissions/sv010/supply_demand.pdf', '2025-03-10 20:10:00', 14.0),
-(14, 13, 6, '/submissions/sv006/career_essay.docx', '2025-03-26 11:30:00', 8.5),
-(15, 8, 6, '/submissions/sv001/career_essay.docx', '2025-03-25 15:20:00', 7.0);
+-- Insert submission
+INSERT INTO submission (student_id, assignment_id, filepath, submitted_at, score) VALUES
+(8, 1, '/submissions/sv001/assignment1.cpp', '2025-03-07 15:30:00', 8.5),
+(9, 1, '/submissions/sv002/assignment1.cpp', '2025-03-06 20:15:00', 9.0),
+(10, 1, '/submissions/sv003/assignment1.cpp', '2025-03-08 22:45:00', 6.5),
+(16, 1, '/submissions/sv009/assignment1.cpp', '2025-03-07 18:20:00', 8.0),
+(8, 2, '/submissions/sv001/assignment2.cpp', '2025-03-21 14:10:00', 7.5),
+(9, 2, '/submissions/sv002/assignment2.cpp', '2025-03-20 16:30:00', 9.5),
+(10, 2, '/submissions/sv003/assignment2.cpp', '2025-03-22 23:30:00', 5.5),
+(8, 3, '/submissions/sv001/stack_project.cpp', '2025-03-23 19:45:00', 17.0),
+(9, 3, '/submissions/sv002/stack_project.cpp', '2025-03-22 10:20:00', 19.5),
+(10, 3, '/submissions/sv003/stack_project.cpp', '2025-03-24 23:55:00', 12.0),
+(11, 5, '/submissions/sv004/supply_demand.pdf', '2025-03-11 16:40:00', 12.5),
+(12, 5, '/submissions/sv005/supply_demand.pdf', '2025-03-12 14:25:00', 13.0),
+(17, 5, '/submissions/sv010/supply_demand.pdf', '2025-03-10 20:10:00', 14.0),
+(13, 6, '/submissions/sv006/career_essay.docx', '2025-03-26 11:30:00', 8.5),
+(8, 6, '/submissions/sv001/career_essay.docx', '2025-03-25 15:20:00', 7.0);
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;

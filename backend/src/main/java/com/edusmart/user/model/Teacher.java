@@ -15,4 +15,7 @@ public class Teacher extends User {
     private String degree;
     private String research_area;
     private int years_of_experience;
+    public Teacher() {
+        this.setUser_type("teacher");
+    }
 }

@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "Edu Smart",
   description: "Make your education smarter",
 };
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -28,6 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

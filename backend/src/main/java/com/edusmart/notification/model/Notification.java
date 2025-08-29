@@ -16,6 +16,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int notification_id;
+    private String title;
     private String content;
     private Timestamp created_at;
     @ManyToOne

@@ -1,5 +1,6 @@
 package com.edusmart.user.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
@@ -7,7 +8,6 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import com.edusmart.department.model.Department;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,6 +38,7 @@ public class User {
     private String address;
     private String email;
     private Date birthday;
+    @JsonProperty("user_type")
     private String user_type;
     private Timestamp created_at;
     private Timestamp updated_at;

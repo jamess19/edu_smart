@@ -1,5 +1,7 @@
 package com.edusmart.user.mapper;
 
+import com.edusmart.course.dto.StudentInCourseDTO;
+import com.edusmart.enrollment.model.Enrollment;
 import com.edusmart.user.dto.StudentDTO;
 import com.edusmart.user.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,13 @@ public class StudentMapper {
                 student.getCompleted_credits(),
                 student.getTotal_credits(),
                 student.getType()
+        );
+    }
+    public StudentInCourseDTO toStudentInCourseDTO(Enrollment enrollment) {
+        Student student = enrollment.getStudent();
+        return new StudentInCourseDTO(
+                student.getFullname(),
+                student.getStudent_code()
         );
     }
 }
